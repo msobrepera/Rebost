@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAddEditUbicacio"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="Afegir Ubicació"></androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <EditText
+            android:id="@+id/etNomUbicacio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:ems="10"
+            android:hint="Nom de la ubicació"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+        <EditText
+            android:id="@+id/etDescripcioUbicacio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Descripcio"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="@+id/etNomUbicacio"
+            app:layout_constraintStart_toStartOf="@+id/etNomUbicacio"
+            app:layout_constraintTop_toBottomOf="@+id/etNomUbicacio" />
+
+        <CheckBox
+            android:id="@+id/cbDatesCad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Gestiona Fechas de Caducidad"
+            app:layout_constraintStart_toStartOf="@+id/etNomUbicacio"
+            app:layout_constraintTop_toBottomOf="@+id/etDescripcioUbicacio" />
+
+        <ImageView
+            android:id="@+id/ivCalendarAddEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cbDatesCad"
+            app:layout_constraintStart_toEndOf="@+id/cbDatesCad"
+            app:layout_constraintTop_toTopOf="@+id/cbDatesCad"
+            app:srcCompat="@drawable/ic_baseline_calendar_today_24" />
+
+        <CheckBox
+            android:id="@+id/cbGestionaCantidadAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Gestiona Cantidad"
+            app:layout_constraintEnd_toEndOf="@+id/cbDatesCad"
+            app:layout_constraintStart_toStartOf="@+id/cbDatesCad"
+            app:layout_constraintTop_toBottomOf="@+id/cbDatesCad" />
+
+        <ImageView
+            android:id="@+id/ivHastagAddEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/cbGestionaCantidadAdd"
+            app:layout_constraintEnd_toEndOf="@+id/ivCalendarAddEdit"
+            app:layout_constraintStart_toStartOf="@+id/ivCalendarAddEdit"
+            app:layout_constraintTop_toTopOf="@+id/cbGestionaCantidadAdd"
+            app:srcCompat="@drawable/ic_hastag" />
+
+        <ImageView
+            android:id="@+id/ivHelpFechas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ivCalendarAddEdit"
+            app:layout_constraintEnd_toEndOf="@+id/etNomUbicacio"
+            app:layout_constraintTop_toTopOf="@+id/ivCalendarAddEdit"
+            app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+
+        <ImageView
+            android:id="@+id/ivHelpCantidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ivHastagAddEdit"
+            app:layout_constraintEnd_toEndOf="@+id/ivHelpFechas"
+            app:layout_constraintStart_toStartOf="@+id/ivHelpFechas"
+            app:layout_constraintTop_toTopOf="@+id/ivHastagAddEdit"
+            app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+
+        <CheckBox
+            android:id="@+id/cbGestionaUbicaciones"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Gestiona Ubicaciones"
+            app:layout_constraintEnd_toEndOf="@+id/cbGestionaCantidadAdd"
+            app:layout_constraintStart_toStartOf="@+id/cbGestionaCantidadAdd"
+            app:layout_constraintTop_toBottomOf="@+id/cbGestionaCantidadAdd" />
+
+        <ImageView
+            android:id="@+id/ivUbicacionAddEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/cbGestionaUbicaciones"
+            app:layout_constraintEnd_toEndOf="@+id/ivHastagAddEdit"
+            app:layout_constraintStart_toStartOf="@+id/ivHastagAddEdit"
+            app:layout_constraintTop_toTopOf="@+id/cbGestionaUbicaciones"
+            app:srcCompat="@drawable/ic_baseline_location_on_24" />
+
+        <ImageView
+            android:id="@+id/ivHelpUbicaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUbicacionAddEdit"
+            app:layout_constraintEnd_toEndOf="@+id/ivHelpCantidad"
+            app:layout_constraintStart_toStartOf="@+id/ivHelpCantidad"
+            app:layout_constraintTop_toTopOf="@+id/ivUbicacionAddEdit"
+            app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddEditUbicacions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@android:color/darker_gray" />"-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Opción 1"
+        android:icon="@drawable/ic_anadir_al_carrito"
+        android:id="@+id/op1"></item>
+    <item android:title="Opción 2"
+        android:icon="@drawable/ic_baseline_add_circle_24"
+        android:id="@+id/op2"></item>
+    <item android:title="Opción 3"
+        android:icon="@drawable/ic_baseline_delete_forever_24"
+        android:id="@+id/op3"></item>
+</menu>

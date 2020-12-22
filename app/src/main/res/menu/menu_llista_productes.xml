@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/imNewScan"
+        android:icon="@drawable/ic_camara_add"
+        android:title="Afegir amb Scanner"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/imUbicacions"
+        android:title="Ubicacions" />
+    <item
+        android:id="@+id/imCategories"
+        android:icon="@drawable/ic_categoria"
+        android:title="Categories"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/imMarques"
+        android:icon="@drawable/ic_marca"
+        android:title="Marques"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/imAjustes"
+        android:title="Ajustes" />
+</menu>

@@ -1,0 +1,28 @@
+<resources>
+
+<!--
+
+    {
+    "code": "8480000348654",
+    "status_verbose": "product found",
+    "product": {
+    "image_url": "https://static.openfoodfacts.org/images/products/848/000/034/8654/front_es.26.400.jpg",
+    "labels": "100% natural,Fuente de calcio,Punto Verde,Sin conservantes",
+    "countries": "España",
+    "id": "8480000348654",
+    "stores_tags": [
+    "mercadona"
+    ],
+    "brands_tags": [
+    "hacendado"
+    ],
+    "generic_name_es": "Almendra natural",
+    "product_name_es": "Almendra natural",
+    "stores": "Mercadona",
+    "brands": "Hacendado"
+    },
+    "status": 1
+    }
+
+    -->
+</resources>

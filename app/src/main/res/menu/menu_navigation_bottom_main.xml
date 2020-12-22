@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/im_home"
+        android:icon="@drawable/ic_shopping_basket_24px_black"
+        android:title="@string/imHome" />
+    <item
+        android:id="@+id/im_buscar"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/TXT_BUSCA"></item>
+    <item
+        android:id="@+id/im_escanea"
+        android:icon="@drawable/ic_scan_codigo_de_barras_24"
+        android:title="Escanear" />
+    <item
+        android:id="@+id/im_mislistas"
+        android:icon="@drawable/ic_baseline_remove_red_eye_24"
+        android:title="Mis Listas" />
+    <item
+        android:id="@+id/im_historial"
+        android:icon="@drawable/ic_baseline_history_24"
+        android:title="Historial de Consultas" />
+</menu>

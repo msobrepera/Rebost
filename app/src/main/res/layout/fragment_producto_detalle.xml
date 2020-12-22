@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".detallproductes.ProductoDetalleFragment">
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFotoDetallProducte"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/tvNomDetallProducte"
+                app:layout_constraintTop_toBottomOf="@+id/tvNomDetallProducte"
+                app:srcCompat="@drawable/ic_shopping_basket_24px_black" />
+
+            <TextView
+                android:id="@+id/tvNomDetallProducte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMarcaDetallProducte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/tvtamanoDetallProducte"
+                app:layout_constraintStart_toEndOf="@+id/tvtamanoDetallProducte"
+                app:layout_constraintTop_toTopOf="@+id/tvtamanoDetallProducte" />
+
+            <TextView
+                android:id="@+id/tvBotigaDetallProducte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/ivCodiDetallProducte"
+                app:layout_constraintStart_toStartOf="@+id/tvtamanoDetallProducte"
+                app:layout_constraintTop_toBottomOf="@+id/tvtamanoDetallProducte" />
+
+            <TextView
+                android:id="@+id/tvtamanoDetallProducte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toEndOf="@+id/ivFotoDetallProducte"
+                app:layout_constraintTop_toTopOf="@+id/ivFotoDetallProducte" />
+
+            <ImageView
+                android:id="@+id/ivCodiDetallProducte"
+                android:layout_width="20dp"
+                android:layout_height="14dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivFotoDetallProducte"
+                app:layout_constraintStart_toStartOf="@+id/tvBotigaDetallProducte"
+                app:srcCompat="@drawable/ic_codigo_de_barras_de_supermercado" />
+
+            <TextView
+                android:id="@+id/tvCodiDetallProducte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/ivCodiDetallProducte"
+                app:layout_constraintStart_toEndOf="@+id/ivCodiDetallProducte"
+                app:layout_constraintTop_toTopOf="@+id/ivCodiDetallProducte" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivFotoDetallProducte" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDetallCaducitats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/recycler_view_detall_caducitats" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

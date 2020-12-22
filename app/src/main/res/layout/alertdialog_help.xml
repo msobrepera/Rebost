@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvResumen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:singleLine="false"
+        android:text="@string/clasificacion_nova"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivGrupo1"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintStart_toStartOf="@+id/tvResumen"
+        app:layout_constraintTop_toBottomOf="@+id/tvResumen"
+        app:srcCompat="@drawable/ic_nova_group_1" />
+
+    <TextView
+        android:id="@+id/tvGrupo1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:singleLine="false"
+        android:text="@string/nova_group_1"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGrupo1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivGrupo1"
+        app:layout_constraintTop_toTopOf="@+id/ivGrupo1" />
+
+    <ImageView
+        android:id="@+id/ivGrupo2"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="@+id/ivGrupo1"
+        app:layout_constraintStart_toStartOf="@+id/ivGrupo1"
+        app:layout_constraintTop_toBottomOf="@+id/ivGrupo1"
+        app:srcCompat="@drawable/ic_nova_group_2" />
+
+    <TextView
+        android:id="@+id/tvGrupo2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nova_group_2"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGrupo2"
+        app:layout_constraintEnd_toEndOf="@+id/tvGrupo1"
+        app:layout_constraintStart_toStartOf="@+id/tvGrupo1"
+        app:layout_constraintTop_toTopOf="@+id/ivGrupo2" />
+
+    <ImageView
+        android:id="@+id/ivGrupo3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="@+id/ivGrupo2"
+        app:layout_constraintStart_toStartOf="@+id/ivGrupo2"
+        app:layout_constraintTop_toBottomOf="@+id/ivGrupo2"
+        app:srcCompat="@drawable/ic_nova_group_3" />
+
+    <TextView
+        android:id="@+id/tvGrupo3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nova_group_3"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGrupo3"
+        app:layout_constraintEnd_toEndOf="@+id/tvGrupo2"
+        app:layout_constraintStart_toStartOf="@+id/tvGrupo2"
+        app:layout_constraintTop_toTopOf="@+id/ivGrupo3" />
+
+    <ImageView
+        android:id="@+id/ivGrupo4"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="@+id/ivGrupo3"
+        app:layout_constraintStart_toStartOf="@+id/ivGrupo3"
+        app:layout_constraintTop_toBottomOf="@+id/ivGrupo3"
+        app:srcCompat="@drawable/ic_nova_group_4" />
+
+    <TextView
+        android:id="@+id/tvGrupo4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nova_group_4"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGrupo4"
+        app:layout_constraintEnd_toEndOf="@+id/tvGrupo3"
+        app:layout_constraintStart_toStartOf="@+id/tvGrupo3"
+        app:layout_constraintTop_toTopOf="@+id/ivGrupo4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

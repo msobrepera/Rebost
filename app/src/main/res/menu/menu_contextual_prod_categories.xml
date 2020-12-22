@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/imSearchProdCategories"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/TXT_BUSCA"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/imFiltro"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:title="@string/TXT_FILTRO"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/imEliminarProductosComprar"
+        android:icon="@drawable/ic_baseline_delete_forever_24"
+        android:title="Eliminar Productos"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/imComprat"
+        android:icon="@drawable/ic_restaurante"
+        android:title="Consumir"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/imAfegirARebost"
+        android:icon="@drawable/ic_eliminar_de_la_cesta"
+        android:title="Afegir a Rebost"
+        app:showAsAction="ifRoom" />
+</menu>

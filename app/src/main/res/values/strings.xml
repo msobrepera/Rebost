@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">El Rebost</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_detall_prod_buscats">DetallProdBuscatsActivity</string>
+    <string name="tab_text_1">Detalle</string>
+    <string name="tab_text_2">Ingredientes</string>
+    <string name="tab_text_3">Nutrición</string>
+    <string name="tab_text_4">Imágenes</string>
+
+    /*** PlaceholderFragment.kt ***/
+    <string name="nova_group_1">Alimentos no procesados o mínimamente procesados</string>
+    <string name="nova_group_2">Ingredientes culinarios procesados</string>
+    <string name="nova_group_3">Alimentos procesados</string>
+    <string name="nova_group_4">Alimentos y bebidas ultraprocesados</string>
+    <string name="nova_group_0">Sin información NOVA</string>
+    <string name="nutriscore_0">Sin información de NutriScore</string>
+
+    <string name="valor_energetico">Valor Energético</string>
+    <string name="grasas">Grasas</string>
+    <string name="grasas_sat">Grasas Saturadas</string>
+    <string name="hidratos_carbono">Hidratos de Carbono</string>
+    <string name="proteinas">Proteinas</string>
+    <string name="azucar">Azúcar </string>
+    <string name="sal">Sal </string>
+    <string name="sodi">Sodio </string>
+    <string name="low">En bajas cantidades</string>
+    <string name="moderate">En cantidades moderadas</string>
+    <string name="high">En altas cantidades</string>
+    <string name="titolcategories">Categorias:</string>
+    <string name="titolNutrientes_100gr">Nutrientes por 100gr:</string>
+    <string name="txttitol_tuPuntuacion">Tu Puntuación:</string>
+
+    <string name="clasificacion_nova">La clasificación NOVA asigna un grupo a los productos alimenticios basándose en cuánto han sido procesados a partir de:</string>
+    <string name="clasificacion_nutriscore">El Nutri-Score es un logotipo que muestra la calidad nutricional de los productos alimenticios con grados de A a E.
+        Con el NutriScore, los productos se pueden comparar fácil y rápidamente. El grado de Nutri-Score está determinado por la cantidad de nutrientes saludables
+        y no saludables:
+        Puntos negativos: energía, grasa saturada, azúcares, sodio (niveles altos se consideran poco saludables)
+        Puntos positivos: la proporción de frutas, verduras y nueces, aceites de oliva, colza y nueces, fibras y proteínas (en altos niveles
+        se consideran buenos para la salud).
+    </string>
+    <string name="txt_titolIngredients">Ingredientes: </string>
+    <string name="txt_titolNutricio">Tabla Nutricional: </string>
+    <string name="txt_sin_ingredientes">No se han encontrado los Ingredientes</string>
+    <string name="txt_sin_nutrientes">Todavía no tenemos información</string>
+
+    <string name="titulo_Llistes">Selecciona una Lista</string>
+    <string name="titulo_AfegirLlista">Añadir Lista</string>
+    <string name="SB_ProducteAfegitaLlista">"Producto añadido a: "</string>
+    <string name="SB_YaExisteenLista">El producto ya existe en: </string>
+    <string name="titulo_AfegirALlista">Añadir a Lista</string>
+    <string name="EliminardeLista">Eliminar de Lista</string>
+    <string name="ERR_RED">Error de red. Inténtalo más tarde.</string>
+    <string name="ERR_PRODUCTO_DESCONOCIDO">Producto no Encontrado</string>
+    <string name="ERR_TEXTO_LISTA_VACIO">ERROR al añadir Lista: El nombre de la Lista no puede estar vacío</string>
+    <string name="ERR_TEXTO_UBIC_VACIO">ERROR al añadir Ubicación: El nombre de la Ubicación no puede estar vacío</string>
+    <string name="SB_EnDesarrollo">Apartado en Desarrollo</string>
+    <string name="SB_LlistaAfegida">Lista añadida correctamente</string>
+    <string name="SB_LlistaActualizada">Lista Actualizada</string>
+    <string name="ERR_TEXTO_LISTA_DUPLICADO">Ya existe una lista con el mismo nombre</string>
+    <string name="ERROR_NO_SE_PUEDE_ELIMNAR">Error: No se pueden eliminar las listas de la compra y Rebost</string>
+    <string name="TXT_BUSCA">Busca</string>
+    <string name="TXT_FILTRO">Filtro</string>
+    <string name="TXT_TITOL_DATESCADUCITAT">Listado de Fechas de Caducidad</string>
+    <string name="actualizar_cantidad">Actulizar cantidad?</string>
+    <string name="SB_Cantidad_Actualizada">Cantidad Actulizada</string>
+    <string name="titol_gestiona_cantidad">Gestiona Cantidad</string>
+    <string name="titol_gestiona_ubicacion">Gestiona Ubicación</string>
+    <string name="titol_guardar_cambios">Guardar Cambios?</string>
+    <string name="titol_sortir_aplicacio">Salir de la aplicación?</string>
+    <string name="titol_gestiona_fechas">Gestiona Fechas de Caducidad</string>
+    <string name="SB_ProductoYaExiste">ERROR: El producto ya existe en la lista:</string>
+    <string name="SB_ProductoYaExisteConMismaFecha">"ERROR: Ya existe el producto con la misma fecha de caducidad en la lista: "</string>
+
+    <string-array name="array_orden">
+        <item>Puntuación</item>
+        <item>Sabor</item>
+        <item>Favorito</item>
+        <item>Nombre</item>
+        <item>Marca</item>
+        <item>Popularidad</item>
+    </string-array>
+
+    //MENU NAVIGATION BOTTOM MAIN
+    <string name="imHome">Home</string>
+    <string name="Titol_AddToList">Añadir a Lista</string>
+    <string name="titulo_AfegirUbicacio">Añadir Ubicación</string>
+    <string name="titulo_ubicacion">Selecciona Ubicación</string>
+    <string name="ERR_UBICACION_EXISTE">ERROR: Ya existe una Ubicación con el mismo Nombre</string>
+    <string name="ver">VER</string>
+    <string name="ver_lista">VER LISTA</string>
+    <string name="ERR_NOM_UBICACIO_OBLIGATORI">El Nombre de la Ubicación no puede estar vacío</string>
+
+
+</resources>
