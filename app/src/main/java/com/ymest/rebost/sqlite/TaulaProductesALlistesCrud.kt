@@ -58,6 +58,36 @@ class TaulaProductesALlistesCrud(context: Context) {
         return colleccioProductes
     }
 
+    fun getCaducats(data:Long): ArrayList<ProducteALlista>{
+        var colleccioProductes: ArrayList<ProducteALlista> = ArrayList()
+        val db = helper.readableDatabase
+        val columnas = arrayOf(
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO)
+
+        val where = Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " = ? "
+
+        val c:Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, where, arrayOf(data.toString()), null, null, null)
+        while(c.moveToNext()){
+            colleccioProductes.add(
+                ProducteALlista(
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID)),
+                    c.getString(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT)),
+                    c.getLong(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO)),
+                )
+            )
+        }
+        db.close()
+        return colleccioProductes
+    }
+
     fun existeProductoenLlista(idLlista: Int?, codiBarres: String):Boolean{
         var existe: Boolean = false
         //Abrir base de datos para leer
