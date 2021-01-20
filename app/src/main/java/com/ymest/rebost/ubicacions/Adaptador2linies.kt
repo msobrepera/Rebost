@@ -2,11 +2,14 @@ package com.ymest.rebost.ubicacions
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.ymest.rebost.R
 import com.ymest.rebost.events.CellClickListener
@@ -15,6 +18,7 @@ import com.ymest.rebost.json.Llistes
 import com.ymest.rebost.json.Ubicacio
 import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
 import com.ymest.rebost.utils.Constants
+import com.ymest.rebost.utils.Funcions
 
 class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var itemsL:ArrayList<Llistes>?, var vede:String, var cellClickListener: CellClickListener, var longClickListener: CellLongClickListener): RecyclerView.Adapter<Adaptador2linies.ViewHolder>()  {
 
@@ -34,6 +38,7 @@ class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var it
         return viewHolder
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemU = itemsU?.get(position)
         val itemL = itemsL?.get(position)
@@ -78,7 +83,14 @@ class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var it
                 holder.nomUbicacio.tag = itemL?.id.toString()
                 holder.tag.visibility = View.GONE
                 //holder.tag.text = item.id.toString()
-                holder.descUbicacio.text = crudProductosLista.getNumProductosUnicosXLista(itemL?.id.toString().toInt()).toString() + " productos"
+                if (itemL?.id == 3){
+                    holder.descUbicacio.text = crudProductosLista.getCaducatsUnics(Funcions.obtenirDataActualMillis()).toString() + " productos"
+                    Log.d("CADUCATS", "CADUCATS: " + crudProductosLista.getCaducats(Funcions.obtenirDataActualMillis()).size.toString() + " productos")
+                } else{
+                    holder.descUbicacio.text = crudProductosLista.getNumProductosUnicosXLista(itemL?.id.toString().toInt()).toString() + " productos"
+                    Log.d("CADUCATS", "ALTRES: " + crudProductosLista.getNumProductosUnicosXLista(itemL?.id.toString().toInt()).toString() + " productos")
+                }
+
 
                 if(itemL?.gestion_dataCad == 0) holder.ivCalendar.visibility = View.GONE else holder.ivCalendar.visibility = View.VISIBLE
                 if(itemL?.gestiona_cantidad == 0) holder.ivHastag.visibility = View.GONE else holder.ivHastag.visibility = View.VISIBLE

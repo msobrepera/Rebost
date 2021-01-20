@@ -1,6 +1,7 @@
 package com.ymest.rebost.productesdecategoria
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -27,6 +29,7 @@ import com.ymest.rebost.events.CellClickListener
 import com.ymest.rebost.events.CellLongClickListener
 import com.ymest.rebost.json.ListaPersonalizadaProducto
 import com.ymest.rebost.json.Personalitzat
+import com.ymest.rebost.json.ProducteALlista
 import com.ymest.rebost.json.ProductesXCategoria.Product
 import com.ymest.rebost.json.ProductesXCategoria.ProductosXCategoria
 import com.ymest.rebost.json.Producto
@@ -37,6 +40,7 @@ import com.ymest.rebost.sqlite.TaulaPersonalitzadaCrud
 import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
 import com.ymest.rebost.sqlite.TaulaProductesCrud
 import com.ymest.rebost.utils.Constants
+import com.ymest.rebost.utils.Funcions
 import com.ymest.rebost.utils.Network
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_productes_de_categoria.*
@@ -85,6 +89,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
     var actionMode: ActionMode? = null
     var callback: ActionMode.Callback? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_productes_de_categoria)
@@ -230,6 +235,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         rvProducteDeCategoria.adapter = viewAdapter
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun carregaProductesLlista(idLlista: String, orden:Int, txtABuscar: String) {
         rvProducteDeCategoria.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(this)
@@ -238,7 +244,13 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         listaProductos = arrayListOf()
         listaProductosPersonalizados = arrayListOf()
         var crudLlistaProductes = TaulaProductesALlistesCrud(this)
-        var productesdelaLlista = crudLlistaProductes.getProductesLlista(idLlista.toInt())
+        var productesdelaLlista: ArrayList<ProducteALlista>
+        if (idLlista.toInt() == 3){
+            productesdelaLlista = crudLlistaProductes.getCaducats(Funcions.obtenirDataActualMillis())
+        }else{
+            productesdelaLlista = crudLlistaProductes.getProductesLlista(idLlista.toInt())
+        }
+
         for(i in productesdelaLlista){
             if (!listaProductos.contains(crudTProducto.getProducte(i.code.toString()))) listaProductos.plusAssign(crudTProducto.getProducte(i.code.toString()))
 

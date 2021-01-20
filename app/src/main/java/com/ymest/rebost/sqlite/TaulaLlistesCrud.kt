@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
+import com.ymest.rebost.backup.CustomBackupAgent
 import com.ymest.rebost.json.Llistes
 import com.ymest.rebost.json.Personalitzat
 import com.ymest.rebost.json.Product
@@ -17,10 +18,11 @@ class TaulaLlistesCrud(context: Context) {
         helper = DataBaseHelper(context)
     }
 
-    fun addLlista(item: String, datacad:Int, gestionaCantidad:Int, gestionaUbicacion:Int) {
+    fun addLlista(id:Int, item: String, datacad:Int, gestionaCantidad:Int, gestionaUbicacion:Int) {
         val db = helper.writableDatabase
 
         val values = ContentValues()
+        values.put(Column.Companion.TLlistes.COL_LLISTES_ID, id)
         values.put(Column.Companion.TLlistes.COL_LLISTES_NOM, item)
         values.put(Column.Companion.TLlistes.COL_DATA_CAD, datacad)
         values.put(Column.Companion.TLlistes.COL_GESTIONA_CANTIDAD, gestionaCantidad)
@@ -28,6 +30,8 @@ class TaulaLlistesCrud(context: Context) {
 
         val newRowId = db.insert(Column.Companion.TLlistes.T_LLISTES, null, values)
         db.close()
+        var backup: CustomBackupAgent = CustomBackupAgent()
+
     }
 
    fun getLlista(id: Int?): Llistes{
@@ -69,6 +73,20 @@ class TaulaLlistesCrud(context: Context) {
         else idLlista = 0
         db.close()
         return idLlista
+    }
+
+    fun getNextID():Int{
+        var nextID = 0
+        val db = helper.readableDatabase
+        val columnas = arrayOf(
+            Column.Companion.TLlistes.COL_LLISTES_ID)
+        val order = Column.Companion.TLlistes.COL_LLISTES_ID + " DESC"
+        val c:Cursor = db.query(Column.Companion.TLlistes.T_LLISTES, columnas, null, null, null, null, order)
+        if(c.moveToFirst()) nextID = c.getInt(c.getColumnIndexOrThrow(Column.Companion.TLlistes.COL_LLISTES_ID))
+        else nextID = 0
+        nextID++
+        db.close()
+        return nextID
     }
 
     fun getAllLlista():ArrayList<Llistes>{
@@ -179,6 +197,12 @@ class TaulaLlistesCrud(context: Context) {
         var db = helper.writableDatabase
         var where = Column.Companion.TLlistes.COL_LLISTES_ID + " =? "
         db.delete(Column.Companion.TLlistes.T_LLISTES, where, arrayOf(id.toString()))
+        db.close()
+    }
+
+    fun deleteAllLlista(){
+        var db = helper.writableDatabase
+        db.delete(Column.Companion.TLlistes.T_LLISTES,null,null)
         db.close()
     }
 }

@@ -489,4 +489,10 @@ class TaulaProductesCrud(context: Context) {
         db.delete(Column.Companion.TProductes.T_PRODUCTES, where, arrayOf(codibarres))
         db.close()
     }
+
+    fun deleteAllProducte(){
+        var db = helper.writableDatabase
+        db.delete(Column.Companion.TProductes.T_PRODUCTES, null, null)
+        db.close()
+    }
 }

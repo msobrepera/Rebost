@@ -58,7 +58,7 @@
     <string name="SB_LlistaAfegida">Lista añadida correctamente</string>
     <string name="SB_LlistaActualizada">Lista Actualizada</string>
     <string name="ERR_TEXTO_LISTA_DUPLICADO">Ya existe una lista con el mismo nombre</string>
-    <string name="ERROR_NO_SE_PUEDE_ELIMNAR">Error: No se pueden eliminar las listas de la compra y Rebost</string>
+    <string name="ERROR_NO_SE_PUEDE_ELIMNAR">Error: No se pueden eliminar las listas de la compra, Rebost y Caducados</string>
     <string name="TXT_BUSCA">Busca</string>
     <string name="TXT_FILTRO">Filtro</string>
     <string name="TXT_TITOL_DATESCADUCITAT">Listado de Fechas de Caducidad</string>
@@ -91,5 +91,23 @@
     <string name="ver_lista">VER LISTA</string>
     <string name="ERR_NOM_UBICACIO_OBLIGATORI">El Nombre de la Ubicación no puede estar vacío</string>
 
+    //LOGIN
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="recuperarpassword">Recuperar Contraseña</string>
+    <string name="forgotPassword">Olvidaste tu contraseña?</string>
+    <string name="firstName">Nombre</string>
+    <string name="lastName">Apellido</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="createAct">Crear cuenta</string>
+    <string name="loginGoogle">Iniciar sesión con Google</string>
+    <string name="error_conexion">No se ha podido conectar</string>
+    <string name="error_login">Error al hacer Login</string>
+    <string name="default_notification_channel_id">101</string>
+    <string name="service_title">Mi servicio</string>
+    <string name="existe_backup">Existe Copia de Seguridad</string>
+    <string name="copia_recuperada">Copia de Seguridad recuperada con éxito</string>
+    <string name="backup">Copia de Seguridad</string>
+    <string name="user_logueado">Usuario Conectado:</string>
 
 </resources>

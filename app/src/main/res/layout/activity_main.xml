@@ -83,7 +83,7 @@
             android:layout_height="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:tint="@color/primaryColor"
+            app:tint="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_settings_24" />
@@ -115,6 +115,26 @@
             app:layout_constraintBottom_toTopOf="@+id/btnEscaneaMain"
             app:layout_constraintEnd_toEndOf="@+id/btnEscaneaMain"
             app:layout_constraintStart_toStartOf="@+id/btnEscaneaMain" />
+
+        <ImageView
+            android:id="@+id/ivUserLogin"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_account_circle_24_primarycolor" />
+
+        <TextView
+            android:id="@+id/tvNomUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUserLogin"
+            app:layout_constraintStart_toEndOf="@+id/ivUserLogin"
+            app:layout_constraintTop_toTopOf="@+id/ivUserLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

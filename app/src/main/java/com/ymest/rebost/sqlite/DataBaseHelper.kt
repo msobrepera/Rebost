@@ -93,7 +93,7 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
                     "," + Column.Companion.TLlistes.COL_DATA_CAD +
                     "," + Column.Companion.TLlistes.COL_GESTIONA_CANTIDAD +
                     "," + Column.Companion.TLlistes.COL_GESTIONA_UBICACIONES + ")" +
-                    "SELECT 'Llista de la Compra','0', '1', '0'"
+                    "SELECT 'Lista de la Compra','0', '1', '0'"
 
         val INSERT_DEFAULT_LLISTES2 =
             "INSERT INTO " + Column.Companion.TLlistes.T_LLISTES +
@@ -101,7 +101,15 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
                     "," + Column.Companion.TLlistes.COL_DATA_CAD +
                     "," + Column.Companion.TLlistes.COL_GESTIONA_CANTIDAD +
                     "," + Column.Companion.TLlistes.COL_GESTIONA_UBICACIONES + ")" +
-                    "SELECT 'Llista del Rebost', '1', '1', '1'"
+                    "SELECT 'Lista del Rebost', '1', '1', '1'"
+
+        val INSERT_DEFAULT_LLISTES3 =
+            "INSERT INTO " + Column.Companion.TLlistes.T_LLISTES +
+                    "(" + Column.Companion.TLlistes.COL_LLISTES_NOM +
+                    "," + Column.Companion.TLlistes.COL_DATA_CAD +
+                    "," + Column.Companion.TLlistes.COL_GESTIONA_CANTIDAD +
+                    "," + Column.Companion.TLlistes.COL_GESTIONA_UBICACIONES + ")" +
+                    "SELECT 'Lista de Caducados', '1', '1', '1'"
 
         val CREATE_TAULA_PRODUCTES_A_LLISTES =
             "CREATE TABLE " + Column.Companion.TProductesALlista.T_PRODUCTESALLISTA +
@@ -171,6 +179,7 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
         p0?.execSQL(CREATE_TAULA_LLISTES)
         p0?.execSQL(INSERT_DEFAULT_LLISTES)
         p0?.execSQL(INSERT_DEFAULT_LLISTES2)
+        p0?.execSQL(INSERT_DEFAULT_LLISTES3)
         p0?.execSQL(CREATE_TAULA_PRODUCTES_A_LLISTES)
         p0?.execSQL(CREATE_TAULA_UBICACIONS)
         p0?.execSQL(INSERT_UBICACIO)

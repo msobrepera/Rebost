@@ -58,6 +58,34 @@ class TaulaProductesALlistesCrud(context: Context) {
         return colleccioProductes
     }
 
+    fun getProductesAllLlistes():ArrayList<ProducteALlista>{
+        var colleccioProductes: ArrayList<ProducteALlista> = ArrayList()
+        val db = helper.readableDatabase
+        val columnas = arrayOf(
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD,
+            Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO)
+
+        val c:Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, null, null, null, null, null)
+        while(c.moveToNext()){
+            colleccioProductes.add(
+                ProducteALlista(
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID)),
+                    c.getString(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT)),
+                    c.getLong(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD)),
+                    c.getInt(c.getColumnIndexOrThrow(Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO)),
+                )
+            )
+        }
+        db.close()
+        return colleccioProductes
+    }
+
     fun getCaducats(data:Long): ArrayList<ProducteALlista>{
         var colleccioProductes: ArrayList<ProducteALlista> = ArrayList()
         val db = helper.readableDatabase
@@ -69,7 +97,7 @@ class TaulaProductesALlistesCrud(context: Context) {
             Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD,
             Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO)
 
-        val where = Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " = ? "
+        val where = Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " < ? "
 
         val c:Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, where, arrayOf(data.toString()), null, null, null)
         while(c.moveToNext()){
@@ -87,6 +115,8 @@ class TaulaProductesALlistesCrud(context: Context) {
         db.close()
         return colleccioProductes
     }
+
+
 
     fun existeProductoenLlista(idLlista: Int?, codiBarres: String):Boolean{
         var existe: Boolean = false
@@ -165,6 +195,19 @@ class TaulaProductesALlistesCrud(context: Context) {
         db.close()
         return total
     }
+
+    fun getCaducatsUnics(data:Long): Int{
+        var total = 0
+        val db = helper.readableDatabase
+        val columnas = arrayOf("COUNT(DISTINCT " + Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES +")")
+        val where = Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " < ? "
+
+        val c:Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, where, arrayOf(data.toString()), null, null, null)
+        c.moveToFirst()
+        total = c.getInt(0)
+        db.close()
+        return total
+    }
     fun getCantidadProductoMismaFecha(idLista:Int, cb:String, data:Long): Int{
         val db = helper.readableDatabase
         val columnas = arrayOf("SUM(" + Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT +")")
@@ -172,6 +215,22 @@ class TaulaProductesALlistesCrud(context: Context) {
                 Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES + " = ? AND " +
                 Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " = ? "
         val args = arrayOf(idLista.toString(), cb, data.toString())
+        var total = 0
+
+        val c: Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, where, args, null, null, null)
+        c.moveToFirst()
+        total = c.getInt(0)
+        db.close()
+        return total
+    }
+
+    fun getCantidadDeUnProductoCaducado(cb:String, data:Long): Int{
+        val db = helper.readableDatabase
+        val columnas = arrayOf("SUM(" + Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT +")")
+        val where =
+                Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_CODI_BARRES + " = ? AND " +
+                Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " < ? "
+        val args = arrayOf(cb, data.toString())
         var total = 0
 
         val c: Cursor = db.query(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, columnas, where, args, null, null, null)
@@ -279,6 +338,12 @@ class TaulaProductesALlistesCrud(context: Context) {
         var db = helper.writableDatabase
         var where = Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA + " =? "
         db.delete(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, where, arrayOf(idLlista.toString()))
+        db.close()
+    }
+
+    fun deleteProductesDeAllLlista(){
+        var db = helper.writableDatabase
+        db.delete(Column.Companion.TProductesALlista.T_PRODUCTESALLISTA, null, null)
         db.close()
     }
 

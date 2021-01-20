@@ -101,7 +101,7 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
                             }
                             Constants.LLISTES, Constants.MISLISTAS->{
                                 for (id in viewAdapterLlistes.itemSeleccionados!!){
-                                    if(id == 1 || id == 2){
+                                    if(id == 1 || id == 2 || id == 3){
                                         Snackbar.make(rvubicacions,getString(R.string.ERROR_NO_SE_PUEDE_ELIMNAR), Snackbar.LENGTH_LONG).show()
                                     }else{
                                         if(TaulaProductesALlistesCrud(applicationContext).getNumProductosXLista(id)>0){

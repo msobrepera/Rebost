@@ -117,5 +117,11 @@ class TaulaUbicacionsCrud(context: Context) {
         db.close()
     }
 
+    fun deleteAllUbicacio(){
+        val db = helper.writableDatabase
+        db.delete(Column.Companion.TUbicacions.T_UBICACIONS,null, null)
+        db.close()
+    }
+
 
 }

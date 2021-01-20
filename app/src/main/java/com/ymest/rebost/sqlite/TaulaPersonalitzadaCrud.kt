@@ -58,6 +58,31 @@ class TaulaPersonalitzadaCrud(context: Context) {
        return productePersonalitzat
    }
 
+    fun getAllProductePersonalitzat(): ArrayList<Personalitzat>{
+        var productePersonalitzat: ArrayList<Personalitzat> = ArrayList()
+        val db = helper.readableDatabase
+        val columnas = arrayOf(
+            Column.Companion.TPersonalitzada.COL_PERSONALITZADA_CODE,
+            Column.Companion.TPersonalitzada.COL_DATA_AFEGIT,
+            Column.Companion.TPersonalitzada.COL_DATA_VIST,
+            Column.Companion.TPersonalitzada.COL_FAVORIT,
+            Column.Companion.TPersonalitzada.COL_GUST,
+            Column.Companion.TPersonalitzada.COL_PUNTUACIO)
+
+        val c:Cursor = db.query(Column.Companion.TPersonalitzada.T_PERSONALITZADA, columnas, null, null, null, null, null)
+        while(c.moveToNext()){
+            productePersonalitzat.add(Personalitzat(
+                c.getString(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_PERSONALITZADA_CODE)),
+                c.getInt(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_DATA_AFEGIT)),
+                c.getInt(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_DATA_VIST)),
+                c.getInt(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_FAVORIT)),
+                c.getInt(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_GUST)),
+                c.getDouble(c.getColumnIndexOrThrow(Column.Companion.TPersonalitzada.COL_PUNTUACIO)),
+            ))
+        }
+        return productePersonalitzat
+    }
+
     fun existeProductoPersonalitzat(codibarres: String?):Boolean{
         var existe: Boolean = false
         //Abrir base de datos para leer
@@ -105,6 +130,12 @@ class TaulaPersonalitzadaCrud(context: Context) {
         var db = helper.writableDatabase
         var where = Column.Companion.TPersonalitzada.COL_PERSONALITZADA_CODE + " =? "
         db.delete(Column.Companion.TPersonalitzada.T_PERSONALITZADA, where, arrayOf(codibarres))
+        db.close()
+    }
+
+    fun deleteAllProductePersonalitzat(){
+        var db = helper.writableDatabase
+        db.delete(Column.Companion.TPersonalitzada.T_PERSONALITZADA, null, null)
         db.close()
     }
 }

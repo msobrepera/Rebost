@@ -14,6 +14,7 @@ class Constants {
         val TAB_DP_TERCERA = "PENDENT"
 
         val TIEMPO_AVISO_CADUCIDAD_HORAS = 48
+        val TIEMPO_AVISO_CADUCIDAD_MS = 172800000
 
         //JSON - API
 

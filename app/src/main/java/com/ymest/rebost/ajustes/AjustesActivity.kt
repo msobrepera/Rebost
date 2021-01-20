@@ -23,6 +23,11 @@ class AjustesActivity : AppCompatActivity() {
             intent.putExtra("VEDE", Constants.LLISTES)
             startActivity(intent)
         }
+        cvBackup.setOnClickListener{
+            val intent = Intent(this, BackupActivity::class.java)
+            intent.putExtra("VEDE", Constants.LLISTES)
+            startActivity(intent)
+        }
 
     }
 

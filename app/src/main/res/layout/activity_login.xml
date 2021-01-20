@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/etEmail"
+        style="style/viewCustom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <EditText
+        android:id="@+id/etPassword"
+        style="@style/viewCustom"
+        android:layout_width="0dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/etEmail"
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        style="@style/viewCustom"
+        android:layout_width="0dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+    <Button
+        android:id="@+id/btnCrearCuenta"
+        style="@style/viewCustom"
+        android:layout_width="0dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/primaryColor"
+        android:onClick="register"
+        android:text="@string/createAct"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignInGoogle"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignInGoogle"
+        app:layout_constraintStart_toStartOf="@+id/btnSignInGoogle" />
+
+    <TextView
+        android:id="@+id/txtForgotPassword"
+        style="@style/viewCustom"
+        android:layout_width="0dp"
+        android:layout_below="@id/btnLogin"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:text="@string/forgotPassword"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+        app:layout_constraintStart_toStartOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+    <Button
+        android:id="@+id/btnSignInGoogle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:text="@string/loginGoogle"
+        app:backgroundTint="@android:color/holo_blue_dark"
+        app:icon="@drawable/googleg_standard_color_18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+        app:layout_constraintStart_toStartOf="@+id/btnLogin" />
+</androidx.constraintlayout.widget.ConstraintLayout>

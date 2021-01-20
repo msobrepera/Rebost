@@ -142,6 +142,8 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
 
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -1086,7 +1088,8 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
 
     public fun addNovaLlista(titulo:String, gestionaDates:Int, gestionaCantidad:Int, gestionaUbicacion: Int) {
         var crudLlista: TaulaLlistesCrud = TaulaLlistesCrud(ctx)
-        crudLlista.addLlista(titulo, gestionaDates, gestionaCantidad, gestionaUbicacion)
+        var nextID = crudLlista.getNextID()
+        crudLlista.addLlista(nextID, titulo, gestionaDates, gestionaCantidad, gestionaUbicacion)
     }
 
     private fun afegirProducteALlista(llistesNom: String, q:Int, datemillis: Long, idUbic: Int ) {

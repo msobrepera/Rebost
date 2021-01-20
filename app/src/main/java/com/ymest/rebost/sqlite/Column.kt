@@ -4,7 +4,7 @@ import android.provider.BaseColumns
 
 class Column {
     companion object{
-        const val VERSION = 4
+        const val VERSION = 7
         class TProductes: BaseColumns {
             companion object {
                 //TAULA PRODUCTES

@@ -143,6 +143,7 @@ class AdaptadorCustom(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun cargaProductoPersonalizado(holder: ViewHolder, itemp: ListaPersonalizadaProducto?) {
         var separador = ""
 
@@ -158,12 +159,25 @@ class AdaptadorCustom(
         }
 
         if(TaulaLlistesCrud(ctx).gestionaCantidad(idLista)){
-            holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadProducto(idLista, itemp?.code.toString()).toString()
+            if(idLista == 3){
+                holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadDeUnProductoCaducado(itemp?.code.toString(), Funcions.obtenirDataActualMillis()).toString()
+            }else {
+                holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadProducto(idLista, itemp?.code.toString()).toString()
+            }
         } else {
             holder.quantitat.visibility = View.GONE
         }
         if(TaulaLlistesCrud(ctx).gestionaFechas(idLista)){
-            holder.datacad.text = "18/12/2020"
+            var primeraDataCad: String = Funcions.MillisToDate(TaulaProductesALlistesCrud(ctx).getPrimeraDataCaducitat(itemp?.code.toString()))
+            holder.datacad.text = primeraDataCad
+            var tempsPerCaducar = Funcions.ComparaData(TaulaProductesALlistesCrud(ctx).getPrimeraDataCaducitat(itemp?.code.toString()))
+            if(tempsPerCaducar<0){
+                holder.alertaCaducitat.setImageResource(R.drawable.ic_senal_de_precaucion_red)
+            } else if(tempsPerCaducar < Constants.TIEMPO_AVISO_CADUCIDAD_MS && tempsPerCaducar > 0){
+                holder.alertaCaducitat.setImageResource(R.drawable.ic_senal_de_precaucion_orange)
+            } else {
+                holder.alertaCaducitat.setImageResource(R.drawable.ic_senal_de_precaucion_green)
+            }
         } else {
             holder.datacad.visibility = View.GONE
             holder.alertaCaducitat.visibility = View.GONE
@@ -171,17 +185,17 @@ class AdaptadorCustom(
 
         Log.d("SUMREBOST", itemp.toString())
 
-        if(!itemp?.product?.productNameEs.isNullOrEmpty()) {
+        if(!itemp?.product?.productNameEs.isNullOrEmpty() && itemp?.product?.productNameEs != "null") {
             if (itemp?.product?.productNameEs?.length!! > 20) {
                 holder.nomArticle.text = itemp?.product.productNameEs.substring(0, 20) + "..."
             } else{
                 holder.nomArticle.text = itemp.product.productNameEs
             }
-        }else if(!itemp?.product?.productName.isNullOrEmpty()){
+        }else if(!itemp?.product?.productName.isNullOrEmpty() && itemp?.product?.productName != "null"){
             holder.nomArticle.text = itemp?.product?.productName
-        }else if(!itemp?.product?.genericNameEs.isNullOrEmpty()){
+        }else if(!itemp?.product?.genericNameEs.isNullOrEmpty() && itemp?.product?.genericNameEs != "null"){
             holder.nomArticle.text = itemp?.product?.genericNameEs
-        }else if(!itemp?.product?.genericName.isNullOrEmpty()){
+        }else if(!itemp?.product?.genericName.isNullOrEmpty() && itemp?.product?.genericName != "null"){
             holder.nomArticle.text = itemp?.product?.genericName
         }
 
@@ -287,17 +301,17 @@ class AdaptadorCustom(
         }
 
         Log.d("SUMREBOST", item.toString())
-        if(!item?.product?.productNameEs.isNullOrEmpty()) {
+        if(!item?.product?.productNameEs.isNullOrEmpty() && item?.product?.productNameEs != "null"){
             if (item?.product?.productNameEs?.length!! > 20) {
                 holder.nomArticle.text = item?.product.productNameEs.substring(0, 20) + "..."
             } else{
                 holder.nomArticle.text = item.product.productNameEs
             }
-        }else if(!item?.product?.productName.isNullOrEmpty()){
+        }else if(!item?.product?.productName.isNullOrEmpty() && item?.product?.productName != "null"){
             holder.nomArticle.text = item?.product?.productName
-        }else if(!item?.product?.genericNameEs.isNullOrEmpty()){
+        }else if(!item?.product?.genericNameEs.isNullOrEmpty() && item?.product?.genericNameEs != "null"){
             holder.nomArticle.text = item?.product?.genericNameEs
-        }else if(!item?.product?.genericName.isNullOrEmpty()){
+        }else if(!item?.product?.genericName.isNullOrEmpty() && item?.product?.genericName != "null"){
             holder.nomArticle.text = item?.product?.genericName
         }
         holder.tamano.text = item?.product?.quantity

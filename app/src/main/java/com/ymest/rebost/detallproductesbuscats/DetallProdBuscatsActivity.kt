@@ -27,4 +27,9 @@ class DetallProdBuscatsActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }*/
     }
+
+    override fun onBackPressed() {
+
+        super.onBackPressed()
+    }
 }

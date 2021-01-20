@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "806813528996",
+    "project_id": "rebost-a9600",
+    "storage_bucket": "rebost-a9600.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806813528996:android:7d98a89c85bf4971068731",
+        "android_client_info": {
+          "package_name": "com.ymest.rebost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806813528996-rhs1jqdheu1fl1kqi84in9dd1oku4mjc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ymest.rebost",
+            "certificate_hash": "bb77575ab017930c74e3f807e0e6f52cf6a60048"
+          }
+        },
+        {
+          "client_id": "806813528996-85sdgrofp9mnnqg69enh9sd78ip7jjcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzWqzpdlWn-T7ihocIaYMhBFrZbkhHZCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806813528996-85sdgrofp9mnnqg69enh9sd78ip7jjcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

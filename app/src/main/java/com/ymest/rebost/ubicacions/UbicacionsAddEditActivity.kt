@@ -338,7 +338,8 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
                 if(cbDatesCad.isChecked) datacad = 1 else datacad = 0
                 if(cbGestionaCantidadAdd.isChecked) gestCant = 1 else gestCant = 0
                 if (cbGestionaUbicaciones.isChecked) gestUbic = 1 else gestUbic = 0
-                crudLlistes.addLlista(etNomUbicacio.text.toString(), datacad, gestCant, gestUbic)
+                var newid = crudLlistes.getNextID()
+                crudLlistes.addLlista(newid, etNomUbicacio.text.toString(), datacad, gestCant, gestUbic)
                 Snackbar.make(etNomUbicacio,getString(R.string.SB_LlistaAfegida), Snackbar.LENGTH_LONG).show()
                 hayCambios = false
                 finish()
