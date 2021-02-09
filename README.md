@@ -20,7 +20,7 @@ Información obtenida de la base de datos de OpenFoodFacts.
 Aplicación escrita en Kotlin con Android Studio  
 Uso de RecyclerView  
 Uso de Fragments  
-Uso de MVVM
+Uso de MVVM  
 Aplicación en desarrollo.
 
 
