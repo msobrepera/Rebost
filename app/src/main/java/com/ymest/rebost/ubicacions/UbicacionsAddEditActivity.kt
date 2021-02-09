@@ -11,19 +11,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.doOnTextChanged
 import com.google.android.material.snackbar.Snackbar
 import com.ymest.rebost.R
 import com.ymest.rebost.json.Llistes
 import com.ymest.rebost.json.Ubicacio
 import com.ymest.rebost.sqlite.TaulaLlistesCrud
-import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
 import com.ymest.rebost.sqlite.TaulaUbicacionsCrud
 import com.ymest.rebost.utils.Constants
 import kotlinx.android.synthetic.main.activity_ubicacions_add_edit.*
-import kotlinx.android.synthetic.main.activity_ubicacions_add_edit.view.*
-import kotlinx.android.synthetic.main.fragment_detall_prod_buscats.*
-import kotlinx.android.synthetic.main.recycler_view_ubicacions.*
 
 
 class UbicacionsAddEditActivity : AppCompatActivity() {
@@ -48,7 +43,7 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
 
         Toast.makeText(this, accio, Toast.LENGTH_SHORT).show()
         when (estema){
-           Constants.UBICACIONS ->{
+           Constants.UBICACIONS, Constants.MISUBICACIONES ->{
                when (accio){
                    "ADD"->{
                        toolbarAddEditUbicacio.title = "Añadir Ubicación"
@@ -149,7 +144,7 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.titol_guardar_cambios))
         builder.setIcon(R.drawable.ic_senal_de_precaucion_orange_24)
-        builder.setMessage("Hay cambios sin guardar. Quieres guardarlos ahora")
+        builder.setMessage("Hay cambios sin guardar. Quieres guardarlos ahora?")
         builder.setPositiveButton("GUARDAR"){ dialog, which ->
             Toast.makeText(this, "GUARDAR", Toast.LENGTH_SHORT).show()
             guardarCambios()
@@ -164,7 +159,7 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
 
     private fun guardarCambios() {
         when(estema){
-            Constants.UBICACIONS->{
+            Constants.UBICACIONS, Constants.MISUBICACIONES->{
                 when(accio){
                     "ADD"-> AfegirUbicacio()
                     "EDIT"-> UpdateUbicacio()
@@ -235,10 +230,10 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.imAdd -> {
-                if(estema==Constants.UBICACIONS) AfegirUbicacio() else afegirLlista()
+                if(estema==Constants.UBICACIONS || estema==Constants.MISUBICACIONES) AfegirUbicacio() else afegirLlista()
             }
             R.id.imSave -> {
-                if(estema==Constants.UBICACIONS) UpdateUbicacio() else updateLlista()
+                if(estema==Constants.UBICACIONS || estema==Constants.MISUBICACIONES) UpdateUbicacio() else updateLlista()
                 //Toast.makeText(this, "Ubicació modificada", Toast.LENGTH_SHORT).show()
                     }
             else ->{
@@ -316,7 +311,8 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
 
     private fun AfegirUbicacio() {
         if(ComprovaCamps()){
-            var novaUbicacio = Ubicacio(0,etNomUbicacio.text.toString(), etDescripcioUbicacio.text.toString())
+            var nouId = TaulaUbicacionsCrud(this).getNextIDUbicacions()
+            var novaUbicacio = Ubicacio(nouId ,etNomUbicacio.text.toString(), etDescripcioUbicacio.text.toString())
             crudUbicacio = TaulaUbicacionsCrud(this)
             crudUbicacio.addUbicacio(novaUbicacio)
             Toast.makeText(this, "Ubicació Afegida", Toast.LENGTH_SHORT).show()
@@ -328,6 +324,8 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun afegirLlista() {
         var datacad: Int = 0
         var gestCant:Int = 0
@@ -338,7 +336,7 @@ class UbicacionsAddEditActivity : AppCompatActivity() {
                 if(cbDatesCad.isChecked) datacad = 1 else datacad = 0
                 if(cbGestionaCantidadAdd.isChecked) gestCant = 1 else gestCant = 0
                 if (cbGestionaUbicaciones.isChecked) gestUbic = 1 else gestUbic = 0
-                var newid = crudLlistes.getNextID()
+                var newid = crudLlistes.getNextIDLlista()
                 crudLlistes.addLlista(newid, etNomUbicacio.text.toString(), datacad, gestCant, gestUbic)
                 Snackbar.make(etNomUbicacio,getString(R.string.SB_LlistaAfegida), Snackbar.LENGTH_LONG).show()
                 hayCambios = false

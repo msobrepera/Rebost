@@ -18,6 +18,7 @@ class TaulaUbicacionsCrud(context: Context) {
 
 
         val values = ContentValues()
+        values.put(Column.Companion.TUbicacions.COL_ID_UBICACIONS, item.id)
         values.put(Column.Companion.TUbicacions.COL_NOM_UBICACIONS, item.nomubicacio)
         values.put(Column.Companion.TUbicacions.COL_DESCUBICACIONS, item.descubicacio)
 
@@ -47,6 +48,20 @@ class TaulaUbicacionsCrud(context: Context) {
         }
         db.close()
         return items
+    }
+
+    fun getNextIDUbicacions():Int{
+        var nextID = 0
+        val db = helper.readableDatabase
+        val columnas = arrayOf(
+            Column.Companion.TUbicacions.COL_ID_UBICACIONS)
+        val order = Column.Companion.TUbicacions.COL_ID_UBICACIONS + " DESC"
+        val c:Cursor = db.query(Column.Companion.TUbicacions.T_UBICACIONS, columnas, null, null, null, null, order)
+        if(c.moveToFirst()) nextID = c.getInt(c.getColumnIndexOrThrow(Column.Companion.TUbicacions.COL_ID_UBICACIONS))
+        else nextID = 0
+        nextID++
+        db.close()
+        return nextID
     }
 
     fun existeUbicacion(nomUbic:String):Boolean{

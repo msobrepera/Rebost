@@ -304,9 +304,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="@string/TXT_TITOL_DATESCADUCITAT"
+                        android:text="Stock en la lista:"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvNomLlistaStock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="TextView"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTitolDatesCaducitat"
+                        app:layout_constraintStart_toEndOf="@+id/tvTitolDatesCaducitat"
+                        app:layout_constraintTop_toTopOf="@+id/tvTitolDatesCaducitat" />
 
                     <View
                         android:id="@+id/divider10"
@@ -388,11 +399,16 @@
 
                     <TextView
                         android:id="@+id/tvNovaDetallBuscats"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:inputType="textMultiLine"
+                        android:maxLines="2"
+                        android:singleLine="false"
                         android:text="TextView"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivHelpNova"
                         app:layout_constraintStart_toEndOf="@+id/ivNovaDetallBuscats"
                         app:layout_constraintTop_toTopOf="parent" />
 

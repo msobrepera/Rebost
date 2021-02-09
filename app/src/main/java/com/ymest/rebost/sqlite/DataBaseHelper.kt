@@ -118,7 +118,8 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
                     Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_LLISTA + " INTEGER, " +
                     Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_QUANTITAT + " INTEGER, " +
                     Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_DATA_CAD + " LONG, " +
-                    Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO + " INTEGER) "
+                    Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_ID_UBICACIO + " INTEGER, " +
+                    Column.Companion.TProductesALlista.COL_PRODUCTESALLISTA_COMPRAT + " INTEGER) "
 
         val CREATE_TAULA_UBICACIONS =
             "CREATE TABLE " + Column.Companion.TUbicacions.T_UBICACIONS +
@@ -191,6 +192,7 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+        Log.d("VARP0", p0.toString())
         p0?.execSQL(REMOVE_TAULA_PRODUCTES)
         p0?.execSQL(REMOVE_TAULA_PERSONALITZADA)
         p0?.execSQL(REMOVE_TAULA_LLISTES)
@@ -202,4 +204,11 @@ class DataBaseHelper(context: Context):SQLiteOpenHelper(context, Column.Companio
 
         onCreate(p0)
     }
+
+    fun deleteAll(p0: SQLiteDatabase){
+
+
+    }
+
+
 }

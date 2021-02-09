@@ -93,26 +93,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthGooogle(account: GoogleSignInAccount) {
         val builder = AlertDialog.Builder(this)
-        /*builder.setTitle(getString(R.string.actualizar_cantidad))
-        builder.setMessage("Ya existe este producto con esta fecha de caducidad en la lista: " + nomLlista + ". Quieres añadir la cantidad seleccionada?")
-        builder.setPositiveButton("ACEPTAR"){ dialog, which ->
-            nuevaCantidad = q + TaulaProductesALlistesCrud(ctx).getCantidadProductoMismaFecha(idLlista, producto.code.toString(), data)
-            TaulaProductesALlistesCrud(ctx).updateCantidadMismaFecha(nuevaCantidad, idLlista, data, producto.code.toString(), idUbic)
-            Snackbar.make(ivAddaListaDetallBuscats, getString(R.string.SB_Cantidad_Actualizada) , Snackbar.LENGTH_LONG).show()
-            dialog.dismiss()
-        }
-        builder.setNegativeButton("CERRAR"){dialog, which->
-            dialog.dismiss()
-        }*/
-
         val dialog: AlertDialog = builder.create()
         dialog.show()
-        //modelo.showDialog(this@Login, getString(R.string.dialog_sesion))
 
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
         mAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-
             if(task.isSuccessful) {
                 dialog.dismiss()
                 startActivity(Intent(this, MainActivity::class.java))
@@ -164,7 +149,10 @@ class LoginActivity : AppCompatActivity() {
                         goHome() // Creamos nuestro método en la parte de abajo
                     } else {
                         // sino le avisamos el usuairo que orcurrio un problema
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        mProgressBar.dismiss()
+                        etEmail.setError("Usuario y/o contraseña incorrectos")
+                        etPassword.setError("Usuario y/o contraseña incorrectos")
+                        Toast.makeText(this, "Usuario y/o contraseña incorrectos. Inténtalo de nuevo", Toast.LENGTH_SHORT).show()
                     }
                 }
         } else {

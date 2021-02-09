@@ -52,4 +52,81 @@
         app:layout_constraintEnd_toEndOf="@+id/tvnameUser"
         app:layout_constraintStart_toStartOf="@+id/tvnameUser"
         app:layout_constraintTop_toBottomOf="@+id/tvnameUser" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOlvidarCuenta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Eliminar Cuenta de Usuario"
+        android:textColor="@color/primaryColor"
+
+        app:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogOut"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogOut"
+        app:layout_constraintStart_toStartOf="@+id/btnLogOut"
+        app:strokeColor="@color/primaryColor"
+        app:strokeWidth="2dp" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/tvMarcaProducteLlistaCompra"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailUser"
+        app:srcCompat="@drawable/ic_baseline_cloud_upload_24" />
+
+    <TextView
+        android:id="@+id/tvMarcaProducteLlistaCompra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Copia en la Nube:"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        app:layout_constraintEnd_toStartOf="@+id/tvDataCopiaNuvol"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+    <TextView
+        android:id="@+id/tvDataCopiaNuvol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="01/01/2020"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMarcaProducteLlistaCompra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvMarcaProducteLlistaCompra"
+        app:layout_constraintTop_toTopOf="@+id/tvMarcaProducteLlistaCompra" />
+
+    <TextView
+        android:id="@+id/tvUid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="start"
+        android:text="tvUid"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="UID:"
+        app:layout_constraintBottom_toTopOf="@+id/btnOlvidarCuenta"
+        app:layout_constraintEnd_toStartOf="@+id/tvUid"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

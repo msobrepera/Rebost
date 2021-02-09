@@ -77,7 +77,7 @@ class AdaptadorCustom(
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("TAG1", "When Tab Title")
+        Log.d("TAG1", tabTitle)
         when (tabTitle){
             Constants.TAB_PRIMERA -> {
                 val item = items?.get(position)
@@ -111,6 +111,10 @@ class AdaptadorCustom(
                 cargaProducto(holder, item)
             }
             Constants.MISLISTAS -> {
+                val itemp = itemsp?.get(position)
+                cargaProductoPersonalizado(holder, itemp)
+            }
+            Constants.MISUBICACIONES -> {
                 val itemp = itemsp?.get(position)
                 cargaProductoPersonalizado(holder, itemp)
             }
@@ -157,16 +161,23 @@ class AdaptadorCustom(
             holder.cvListaProductos.setCardBackgroundColor(Color.WHITE)
             //holder.cvListaProductos.setBackgroundColor(Color.WHITE)
         }
-
-        if(TaulaLlistesCrud(ctx).gestionaCantidad(idLista)){
-            if(idLista == 3){
-                holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadDeUnProductoCaducado(itemp?.code.toString(), Funcions.obtenirDataActualMillis()).toString()
-            }else {
-                holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadProducto(idLista, itemp?.code.toString()).toString()
+        when(tabTitle){
+            Constants.MISLISTAS->{
+                if(TaulaLlistesCrud(ctx).gestionaCantidad(idLista)){
+                    if(idLista == 3){
+                        holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadDeUnProductoCaducado(itemp?.code.toString(), Funcions.obtenirDataActualMillis()).toString()
+                    }else {
+                        holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadProducto(idLista, itemp?.code.toString()).toString()
+                    }
+                } else {
+                    holder.quantitat.visibility = View.GONE
+                }
             }
-        } else {
-            holder.quantitat.visibility = View.GONE
+            Constants.MISUBICACIONES->{
+                holder.quantitat.text = TaulaProductesALlistesCrud(ctx).getCantidadProductoXUbicacion(idLista, itemp?.code.toString()).toString()
+            }
         }
+
         if(TaulaLlistesCrud(ctx).gestionaFechas(idLista)){
             var primeraDataCad: String = Funcions.MillisToDate(TaulaProductesALlistesCrud(ctx).getPrimeraDataCaducitat(itemp?.code.toString()))
             holder.datacad.text = primeraDataCad
@@ -368,7 +379,7 @@ class AdaptadorCustom(
         when(tabTitle){
             Constants.TAB_PRIMERA, Constants.TAB_SEGONA, Constants.TAB_TERCERA, "LISTPRODCAT", Constants.HISTORIAL -> itemCount =
                 items?.count()!!
-            Constants.MISLISTAS -> itemCount = itemsp?.count()!!
+            Constants.MISLISTAS, Constants.MISUBICACIONES -> itemCount = itemsp?.count()!!
         }
         return itemCount
     }
@@ -401,6 +412,17 @@ class AdaptadorCustom(
             }
             notifyDataSetChanged()
         }
+    }
+
+    fun deleteSelccionados(){
+        for (item in itemSeleccionados!!) {
+            //itemSeleccionados?.remove(item)
+            TaulaProductesALlistesCrud(ctx).deleteUnProducteDeUnaLlista(item, idLista!!.toInt())
+            notifyDataSetChanged()
+            Log.d("DELETE", "ITEM: " + item + " Eliminado")
+        }
+        destruirActionMode()
+
     }
 
     fun obtenerNumSeleccionados():Int{

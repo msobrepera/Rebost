@@ -28,9 +28,12 @@ class Constants {
         val URL_PRODUCT_WEB = "https://es.openfoodfacts.org/product/"
 
         val CATEGORIES = "Categorias"
+        val SCAN = "Scan"
+        val NOTIFICACIO = "Notificacion"
         val MARQUES = "Marcas"
         val MARQUESYSUPER = "Marcas y Supermercados"
         val UBICACIONS = "Ubicaciones"
+        val MISUBICACIONES = "Mis Ubicaciones"
         val LLISTES = "Listas"
         val MISLISTAS = "Mis Listas"
         val MAINACT = "MainActivity"

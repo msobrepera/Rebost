@@ -34,7 +34,7 @@ import com.ymest.rebost.utils.Funcions
 class TabsFragment(ctx: Context, tabTitle: String) : Fragment(), CellClickListener,
     CellLongClickListener {
 
-
+/*
     var ctx:Context
     var tabTitle:String
 
@@ -239,7 +239,7 @@ class TabsFragment(ctx: Context, tabTitle: String) : Fragment(), CellClickListen
         }
         adaptador = AdaptadorCustom (ctx, listaProductos, null, tabTitle, null, this, this)
         rview.adapter = adaptador
-        /*Log.d("CRRAGANTRV", "Carregant RV")
+        *//*Log.d("CRRAGANTRV", "Carregant RV")
         rview.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(ctx)
         rview.layoutManager = layoutManager
@@ -264,27 +264,27 @@ class TabsFragment(ctx: Context, tabTitle: String) : Fragment(), CellClickListen
             }
         }
         adaptador = AdaptadorCustom(ctx, listaProductos, tabTitle, this, this)
-        rview.adapter = adaptador*/
+        rview.adapter = adaptador*//*
 
-    }
+    }*/
 
     override fun onCellClickListener(id: String?){
-        if(!isActionMode) {
+       /* if(!isActionMode) {
             Toast.makeText(ctx, "Click a: " + id, Toast.LENGTH_SHORT).show()
-            /*var intent = Intent(activity, ProductoDetalleActivity::class.java)
+            *//*var intent = Intent(activity, ProductoDetalleActivity::class.java)
             intent.putExtra("DE", tabTitle)
-            intent.putExtra("CODI", id)*/
+            intent.putExtra("CODI", id)*//*
             var intent = Intent(activity, DetallProdBuscatsActivity::class.java)
             intent.putExtra("ID", id)
             startActivity(intent)
         } else{
             adaptador.seleccionarItem(id)
             actionMode?.title = adaptador.obtenerNumSeleccionados().toString() + " seleccionados"
-        }
+        }*/
     }
 
     override fun onCellLongClickListener(id: String?): Boolean{
-        Toast.makeText(ctx, "Click Llarg a: " + id, Toast.LENGTH_SHORT).show()
+       /* Toast.makeText(ctx, "Click Llarg a: " + id, Toast.LENGTH_SHORT).show()
         if(!isActionMode){
             (activity as AppCompatActivity).setSupportActionBar(toolbarLlistaProductes)
             (activity as AppCompatActivity).startSupportActionMode(callback!!)
@@ -295,7 +295,7 @@ class TabsFragment(ctx: Context, tabTitle: String) : Fragment(), CellClickListen
             adaptador.seleccionarItem(id)
         }
         //inidicamos en el titulo el número de elementos seleccionados
-        actionMode?.title = adaptador.obtenerNumSeleccionados().toString() + " seleccionados"
+        actionMode?.title = adaptador.obtenerNumSeleccionados().toString() + " seleccionados"*/
         return true
 
     }
@@ -303,7 +303,7 @@ class TabsFragment(ctx: Context, tabTitle: String) : Fragment(), CellClickListen
 
     override fun onResume() {
         super.onResume()
-        carregaRecyclerViewLlistaProductes()
+        /*carregaRecyclerViewLlistaProductes()*/
     }
 
 

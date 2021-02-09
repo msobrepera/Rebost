@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -35,7 +36,6 @@ import com.ymest.rebost.login.LoginActivity
 import com.ymest.rebost.login.UserAccountActivity
 import com.ymest.rebost.productesdecategoria.ProductesDeCategoriaActivity
 import com.ymest.rebost.scan.ScanActivity
-import com.ymest.rebost.services.MyService
 import com.ymest.rebost.sqlite.TaulaLlistesCrud
 import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
 import com.ymest.rebost.sqlite.TaulaProductesCrud
@@ -79,6 +79,14 @@ class MainActivity : AppCompatActivity() {
                 MostrarAlertDialogHayBackup()
             }
         }
+        btnStart.visibility = View.GONE
+        btnStop.visibility = View.GONE
+        /*btnStart.setOnClickListener {
+            startService(Intent(applicationContext, MyService::class.java))
+        }
+        btnStop.setOnClickListener {
+            stopService(Intent(applicationContext, MyService::class.java))
+        }*/
 
         btnBuscar.setOnClickListener {
             intent = Intent(this, ProductesDeCategoriaActivity::class.java)
@@ -166,9 +174,9 @@ class MainActivity : AppCompatActivity() {
 
         compruebaSiHayUser()
 
-        if (compruebaCaducados()){
+        /*if (compruebaCaducados()){
             muestraNotifiacion()
-        }
+        }*/
 
 
     }
@@ -234,9 +242,9 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onRestart() {
         compruebaSiHayUser()
-        if (compruebaCaducados()){
+        /*if (compruebaCaducados()){
             muestraNotifiacion()
-        }
+        }*/
         super.onRestart()
     }
 
@@ -252,6 +260,8 @@ class MainActivity : AppCompatActivity() {
 
         }
         intent.putExtra("ID", primerCaducat.code)
+        intent.putExtra("VEDE", Constants.NOTIFICACIO)
+        intent.putExtra("IDLL", primerCaducat.idLlista)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this,
@@ -315,8 +325,11 @@ class MainActivity : AppCompatActivity() {
             tvNomUser.text = "LogIn"
             ivUserLogin.setImageResource(R.drawable.ic_baseline_account_circle_24_primarycolor)
         } else{
-            tvNomUser.text = mAuth.currentUser?.displayName
-            Picasso.get().load(mAuth.currentUser?.photoUrl).into(ivUserLogin)
+            Log.d("PHOTOURL", mAuth.currentUser?.photoUrl.toString())
+            if(!mAuth.currentUser?.displayName.isNullOrEmpty()) tvNomUser.text = mAuth.currentUser?.displayName
+            else tvNomUser.text = mAuth.currentUser?.email
+            if(!mAuth.currentUser?.photoUrl.toString().isNullOrEmpty() && mAuth.currentUser?.photoUrl.toString() != "null") Picasso.get().load(mAuth.currentUser?.photoUrl).into(ivUserLogin)
+            else ivUserLogin.setImageResource(R.drawable.ic_baseline_account_circle_24_primarycolor)
         }
     }
 

@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_baseline_list_add_24"
         android:title="@string/Titol_AddToList"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/imDeleteDeLista"
+        android:icon="@drawable/ic_baseline_delete_forever_24_primary_light"
+        android:title="Elimina"
+        app:showAsAction="ifRoom" />
 </menu>

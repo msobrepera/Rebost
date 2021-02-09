@@ -120,6 +120,7 @@ class CategoriesActivity : AppCompatActivity(), CellClickListener, CellLongClick
                 Constants.CATEGORIES -> url = Constants.URL_API_CATEGORIES
                 Constants.MARQUES    -> url = Constants.URL_API_MARQUES
             }
+            Log.d("URL", "URL: " + url)
             val request = StringRequest(Request.Method.GET, url, { response ->
                 var gson = Gson()
                 categoriaAPI = gson.fromJson(response, Categories::class.java)

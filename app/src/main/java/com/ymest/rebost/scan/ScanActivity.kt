@@ -53,7 +53,8 @@ class ScanActivity : AppCompatActivity() {
     private var toneGen1: ToneGenerator? = null
     //private var barcodeText: TextView? = null
     private var barcodeData: String? = null
-    lateinit var tab:String
+    //lateinit var tab:String
+    lateinit var idLlista: String
 
 
     val network = Network(this)
@@ -63,12 +64,20 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+
+        if(intent.getStringExtra("IDLLISTA").toString().isNullOrEmpty()){
+            idLlista = "0"
+        }else{
+            idLlista =intent.getStringExtra("IDLLISTA").toString()
+        }
+        Log.d("IDLLISTA", "SCAN ONCREATE: " + idLlista)
+
         toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
         surfaceView = findViewById(R.id.surface_view)
         //barcodeText = findViewById(R.id.barcode_text)
         barcodeData = ""
         initialiseDetectorsAndSources()
-        tab = intent.getStringExtra("TAB").toString()
+       // tab = intent.getStringExtra("TAB").toString()
         pbScan.visibility = View.GONE
     }
 
@@ -230,6 +239,9 @@ class ScanActivity : AppCompatActivity() {
                     if (producto.statusVerbose != "product not found") {
                         var intent = Intent(this, DetallProdBuscatsActivity::class.java)
                         intent.putExtra("ID", barcodeData)
+                        intent.putExtra("VEDE", Constants.SCAN)
+                        intent.putExtra("IDLL", idLlista)
+                        Log.d("IDLLISTA", "SCAN ACTIVITY: " + idLlista)
                         startActivity(intent)
                         /*cvScan.visibility = View.GONE
 

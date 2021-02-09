@@ -81,6 +81,12 @@
         <item>Popularidad</item>
     </string-array>
 
+    <string-array name="array_filtro_lista_compra">
+        <item>Ver Todos</item>
+        <item>Ver Pendientes de Comprar</item>
+        <item>Ver Comprados</item>
+    </string-array>
+
     //MENU NAVIGATION BOTTOM MAIN
     <string name="imHome">Home</string>
     <string name="Titol_AddToList">Añadir a Lista</string>
@@ -103,11 +109,19 @@
     <string name="loginGoogle">Iniciar sesión con Google</string>
     <string name="error_conexion">No se ha podido conectar</string>
     <string name="error_login">Error al hacer Login</string>
-    <string name="default_notification_channel_id">101</string>
+    <string name="default_notification_channel_id">1001</string>
     <string name="service_title">Mi servicio</string>
     <string name="existe_backup">Existe Copia de Seguridad</string>
     <string name="copia_recuperada">Copia de Seguridad recuperada con éxito</string>
     <string name="backup">Copia de Seguridad</string>
     <string name="user_logueado">Usuario Conectado:</string>
+    <string name="olvidar_Cuenta">Eliminar Cuenta</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="limpiar_comprados">Limpiar comprados</string>
+    <string name="enviar_a_lista">Enviar a Lista</string>
+    <string name="cambiar_vista">Cambiar Vista</string>
+    <string name="ERROR_NO_SE_PUEDE_ELIMNAR_UBICACION">No se puede eliminar la Ubicación por defecto</string>
+    <string name="existen_productos">Existen artículos</string>
+    <string name="ubicacion_no_vacía">Los artículos de esta ubicación se moverán a la ubicación por defecto</string>
 
 </resources>

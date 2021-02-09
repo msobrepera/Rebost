@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +19,13 @@ import com.ymest.rebost.R
 import com.ymest.rebost.json.Llistes
 import com.ymest.rebost.json.Ubicacio
 import com.ymest.rebost.productesdecategoria.ProductesDeCategoriaActivity
+import com.ymest.rebost.productesdecategoria.ProductesLlistaCompraActivity
 import com.ymest.rebost.sqlite.TaulaLlistesCrud
 import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
 import com.ymest.rebost.sqlite.TaulaUbicacionsCrud
 import com.ymest.rebost.utils.Constants
 import kotlinx.android.synthetic.main.activity_ubicacions.*
+import kotlinx.android.synthetic.main.fragment_detall_prod_buscats.*
 
 class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClickListener {
     lateinit var layoutManager: RecyclerView.LayoutManager
@@ -56,10 +59,12 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
         CargaRecyclerView()
         Toast.makeText(this, vede, Toast.LENGTH_SHORT).show()
 
+
         fabUbicacions.setOnClickListener {
             intent = Intent(this, UbicacionsAddEditActivity::class.java)
             intent.putExtra("ACCIO", "ADD")
             intent.putExtra("ESTEMA", vede)
+            Log.d("TAG1", vede)
             startActivity(intent)
         }
 
@@ -93,8 +98,13 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
                         when (vede){
                             Constants.UBICACIONS->{
                                 for (id in viewAdapter.itemSeleccionados!!){
-                                    crudUbicacio = TaulaUbicacionsCrud(applicationContext)
-                                    crudUbicacio.deleteUbicacio(id)
+                                    if(id==1){
+                                        Snackbar.make(rvubicacions,getString(R.string.ERROR_NO_SE_PUEDE_ELIMNAR_UBICACION), Snackbar.LENGTH_LONG).show()
+                                    }else{
+                                        if(TaulaProductesALlistesCrud(applicationContext).getNumProductosUnicosXUbicacion(id) > 0){
+                                            mostraADUbicacionNoVacia(id)
+                                        }
+                                    }
                                 }
                                 CargaRecyclerView()
                                 viewAdapter.terminarActionMode()
@@ -140,31 +150,85 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
         }
     }
 
+    private fun mostraADUbicacionNoVacia(id:Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.existen_productos))
+        builder.setMessage(getString(R.string.ubicacion_no_vacía))
+        builder.setPositiveButton("ACEPTAR"){ dialog, which ->
+            TaulaProductesALlistesCrud(applicationContext).updateUbicacion(id, 1)
+            crudUbicacio = TaulaUbicacionsCrud(applicationContext)
+            crudUbicacio.deleteUbicacio(id)
+            CargaRecyclerView()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("CERRAR"){dialog, which->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_contextual_listas_ubicaciones, menu)
+        var btnCambiarVista = menu?.findItem(R.id.imCambiarVista)
+
+        btnCambiarVista?.isVisible = vede == Constants.MISLISTAS || vede == Constants.MISUBICACIONES
+
+        btnCambiarVista?.setOnMenuItemClickListener { item ->
+            when (item?.itemId) {
+                R.id.imCambiarVista -> {
+                    when (vede){
+                        Constants.MISLISTAS ->{
+                            vede = Constants.MISUBICACIONES
+                            CargaRecyclerView()
+                        }
+                        Constants.MISUBICACIONES->{
+                            vede = Constants.MISLISTAS
+                            CargaRecyclerView()
+                        }
+                    }
+                    toolbarUbicacio.title = vede
+                    Log.d("FILTRA", "click en Filtra")
+
+                }
+
+            }
+            true
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
     fun CargaRecyclerView(){
         rvubicacions.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(this)
         rvubicacions.layoutManager = layoutManager
         when(vede){
-            Constants.UBICACIONS->{
+            Constants.UBICACIONS, Constants.MISUBICACIONES->{
                 crudUbicacio = TaulaUbicacionsCrud(this)
                 llistaUbicacions = crudUbicacio.getAllUbicacions()
                 viewAdapter = Adaptador2linies(this, llistaUbicacions, null, vede, this, this)
                 rvubicacions.adapter = viewAdapter
             }
-            Constants.LLISTES ->{
+
+            Constants.LLISTES, Constants.MISLISTAS ->{
                 crudLlistes = TaulaLlistesCrud(this)
                 llistaLlistes = crudLlistes.getAllLlista()
                 viewAdapterLlistes = Adaptador2linies(this, null, llistaLlistes, vede, this, this)
                 /*viewAdapterLlistes = AdaptadorLlistes(this, llistaLlistes, this, this)*/
                 rvubicacions.adapter = viewAdapterLlistes
             }
-            Constants.MISLISTAS ->{
+           /* Constants.MISLISTAS ->{
                 crudLlistes = TaulaLlistesCrud(this)
                 llistaLlistes = crudLlistes.getAllLlista()
                 viewAdapterLlistes = Adaptador2linies(this, null, llistaLlistes, vede, this, this)
-                /*viewAdapterLlistes = AdaptadorLlistes(this, llistaLlistes, this, this)*/
+                *//*viewAdapterLlistes = AdaptadorLlistes(this, llistaLlistes, this, this)*//*
                 rvubicacions.adapter = viewAdapterLlistes
-            }
+            }*/
         }
 
 
@@ -182,6 +246,18 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
                     intent.putExtra("ESTEMA", Constants.UBICACIONS)
                     intent.putExtra("ACCIO", "EDIT")
                     intent.putExtra("ID", id)
+                    startActivity(intent)
+                }
+                viewAdapter.notifyDataSetChanged()
+            }
+            Constants.MISUBICACIONES->{
+                if (isActionMode){
+                    viewAdapter.seleccionarItem(id.toString().toInt())
+                    actionMode?.title = viewAdapter.obtenerNumSeleccionados().toString() + " seleccionados"
+                } else {
+                    intent = Intent(this, ProductesDeCategoriaActivity::class.java)
+                    intent.putExtra("VEDE", vede)
+                    intent.putExtra("IDLLISTA", id)
                     startActivity(intent)
                 }
                 viewAdapter.notifyDataSetChanged()
@@ -205,10 +281,18 @@ class UbicacionsActivity : AppCompatActivity(), CellClickListener, CellLongClick
                     viewAdapterLlistes.seleccionarItem(id.toString().toInt())
                     actionMode?.title = viewAdapterLlistes.obtenerNumSeleccionados().toString() + " seleccionados"
                 } else {
-                    intent = Intent(this, ProductesDeCategoriaActivity::class.java)
-                    intent.putExtra("VEDE", vede)
-                    intent.putExtra("IDLLISTA", id)
-                    startActivity(intent)
+                    if(id == "1"){
+                        intent = Intent(this, ProductesLlistaCompraActivity::class.java)
+                        intent.putExtra("VEDE", vede)
+                        intent.putExtra("IDLLISTA", id)
+                        startActivity(intent)
+                    }else{
+                        intent = Intent(this, ProductesDeCategoriaActivity::class.java)
+                        intent.putExtra("VEDE", vede)
+                        intent.putExtra("IDLLISTA", id)
+                        startActivity(intent)
+                    }
+
                 }
             }
         }

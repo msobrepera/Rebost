@@ -48,6 +48,7 @@ class TaulaLlistesCrud(context: Context) {
        val args = id.toString()
 
        val c:Cursor = db.query(Column.Companion.TLlistes.T_LLISTES, columnas, where, arrayOf(args), null, null, null)
+       llistaSeleccionada = Llistes()
        while(c.moveToNext()){
            llistaSeleccionada = Llistes(c.getInt(c.getColumnIndexOrThrow(Column.Companion.TLlistes.COL_LLISTES_ID)),
                                         c.getString(c.getColumnIndexOrThrow(Column.Companion.TLlistes.COL_LLISTES_NOM)),
@@ -75,7 +76,7 @@ class TaulaLlistesCrud(context: Context) {
         return idLlista
     }
 
-    fun getNextID():Int{
+    fun getNextIDLlista():Int{
         var nextID = 0
         val db = helper.readableDatabase
         val columnas = arrayOf(
@@ -153,6 +154,8 @@ class TaulaLlistesCrud(context: Context) {
         db.update(Column.Companion.TLlistes.T_LLISTES, values, where, args)
         db.close()
     }
+
+
 
     fun gestionaCantidad(idLlista:Int?): Boolean{
         var gestiona: Boolean = false

@@ -88,6 +88,14 @@ class Backup(var ctx: Context) {
         }
     }
 
+    fun eliminarArchivosBackupFirebase(){
+        var storageRef = Firebase.storage.reference
+        Log.d("FIREBASEERR", "Existe onSuccessListener")
+        storageRef.child(mAuth.uid.toString() + "_Backup.csv").delete()
+        Log.d("FIREBASEERR", "Archivo eliminado")
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun importCSV(){
         var hijos = folder.listFiles()
@@ -106,6 +114,8 @@ class Backup(var ctx: Context) {
 
         if (csvFile.exists()){
             try{
+                /*var dbHelper = DataBaseHelper(ctx)
+                dbHelper.onUpgrade(dbHelper.writableDatabase,0,0)*/
                 TaulaLlistesCrud(ctx).deleteAllLlista()
                 TaulaUbicacionsCrud(ctx).deleteAllUbicacio()
                 TaulaProductesCrud(ctx).deleteAllProducte()
@@ -158,12 +168,12 @@ class Backup(var ctx: Context) {
                                     pnnsGroups2 = nextLine[21],
                                     ingredients = null,
                                     ingredientsTags = listOf(nextLine[23]),
-                                    ingredientsText = nextLine[24],
+                                    /*ingredientsText = nextLine[24],
                                     ingredientsTextEs = nextLine[25],
                                     ingredientsTextEn = nextLine[26],
                                     ingredientsTextWithAllergens = nextLine[27],
                                     ingredientsTextWithAllergensEs = nextLine[28],
-                                    ingredientsTextWithAllergensEn = nextLine[29],
+                                    ingredientsTextWithAllergensEn = nextLine[29],*/
                                     ingredientsFromPalmOilTags = listOf(nextLine[30]),
                                     additivesTags = listOf(nextLine[31]),
                                     additivesOriginalTags = listOf(nextLine[32]),
@@ -207,7 +217,8 @@ class Backup(var ctx: Context) {
                                 nextLine[2].toInt(),
                                 nextLine[3].toInt(),
                                 nextLine[4].toLong(),
-                                nextLine[5].toInt()
+                                nextLine[5].toInt(),
+                                nextLine[6].toInt()
                             )
                             TaulaProductesALlistesCrud(ctx).addProducteALlista(prodALlista)
                         }
@@ -226,7 +237,7 @@ class Backup(var ctx: Context) {
                 }
                 muestraADCopiaRecuperada()
             } catch (e: Exception){
-                Toast.makeText(ctx, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(ctx, "ERROR RECUPERANDO: " + e.message, Toast.LENGTH_SHORT).show()
                 Log.d("IMPORTCSV", e.message.toString())
             }
         }else {
@@ -291,6 +302,8 @@ class Backup(var ctx: Context) {
                 fw.append("" + recordList[i].dataCaducitat)
                 fw.append(";")
                 fw.append("" + recordList[i].idUbicacio)
+                fw.append(";")
+                fw.append("" + recordList[i].comprat)
                 fw.append("\n")
             }
 
@@ -361,32 +374,32 @@ class Backup(var ctx: Context) {
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsText).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsText*/).toString().replace(
                     ";",
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsTextEs).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsTextEs*/).toString().replace(
                     ";",
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsTextEn).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsTextEn*/).toString().replace(
                     ";",
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsTextWithAllergens).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsTextWithAllergens*/).toString().replace(
                     ";",
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsTextWithAllergensEs).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsTextWithAllergensEs*/).toString().replace(
                     ";",
                     ","
                 )
                 fw.append(";")
-                fw.append("" + recordList[i].product?.ingredientsTextWithAllergensEn).toString().replace(
+                fw.append("" /*+ recordList[i].product?.ingredientsTextWithAllergensEn*/).toString().replace(
                     ";",
                     ","
                 )

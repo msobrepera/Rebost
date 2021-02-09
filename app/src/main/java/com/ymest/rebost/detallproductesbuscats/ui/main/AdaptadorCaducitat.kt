@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.ymest.rebost.R
@@ -14,6 +15,7 @@ import com.ymest.rebost.json.ProducteALlista
 import com.ymest.rebost.nutricio.Nutricio
 import com.ymest.rebost.sqlite.TaulaLlistesCrud
 import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
+import com.ymest.rebost.sqlite.TaulaUbicacionsCrud
 import com.ymest.rebost.utils.Funcions
 import com.ymest.rebost.utils.Funcions.Companion.margin
 
@@ -36,12 +38,30 @@ class AdaptadorCaducitat(var ctx: Context, items:ArrayList<ProducteALlista>, var
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items.get(position)
 
+        if(TaulaLlistesCrud(ctx).gestionaUbicaciones(item.idLlista)){
+            holder.lista.text = TaulaUbicacionsCrud(ctx).getUbicacio(item.idUbicacio.toString().toInt()).nomubicacio
+        } else{
+            holder.lista.text = "No gestiona Ubicaciones"
+        }
+        if(TaulaLlistesCrud(ctx).gestionaFechas(item.idLlista)){
+            holder.datacad.text = Funcions.MillisToDate(item.dataCaducitat!!.toLong())
+            holder.datacad.tag = item.id
+        } else{
+            holder.datacad.text = "-"
+            holder.datacad.tag = item.id
+        }
+        if(TaulaLlistesCrud(ctx).gestionaCantidad(item.idLlista)){
+            holder.qdatacad.text = item.quantitat.toString()
+        }else{
+            holder.qdatacad.text = "-"
+        }
 
-        holder.lista.text = TaulaLlistesCrud(ctx).getLlista(item.idLlista).nomLlista +" (" + item.idUbicacio + ")"
-        holder.datacad.text = Funcions.MillisToDate(item.dataCaducitat!!.toLong())
+
+
+       /* holder.datacad.text = Funcions.MillisToDate(item.dataCaducitat!!.toLong())
         holder.datacad.tag = item.id
         holder.ivDeleteFecha.tag = item.id
-        holder.qdatacad.text = item.quantitat.toString()
+        holder.qdatacad.text = item.quantitat.toString()*/
 
         holder.ivDeleteFecha.setOnClickListener {
             cellClickListener.onCellClickListener(item?.id.toString())
@@ -74,17 +94,20 @@ class AdaptadorCaducitat(var ctx: Context, items:ArrayList<ProducteALlista>, var
 
 
 
+
     class ViewHolder(vista: View): RecyclerView.ViewHolder(vista) {
         var lista: TextView
         var datacad: TextView
         var qdatacad: TextView
         var ivDeleteFecha: ImageView
 
+
         init{
             this.lista = vista.findViewById(R.id.tvLeftText)
             this.datacad = vista.findViewById(R.id.tvCenterText)
             this.qdatacad = vista.findViewById(R.id.tvRightText)
             this.ivDeleteFecha = vista.findViewById(R.id.ivDeleteFechaCad)
+
         }
     }
 

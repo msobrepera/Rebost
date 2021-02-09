@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
@@ -35,10 +36,7 @@ import com.ymest.rebost.json.ProductesXCategoria.ProductosXCategoria
 import com.ymest.rebost.json.Producto
 import com.ymest.rebost.llistatproductes.AdaptadorCustom
 import com.ymest.rebost.scan.ScanActivity
-import com.ymest.rebost.sqlite.TaulaLlistesCrud
-import com.ymest.rebost.sqlite.TaulaPersonalitzadaCrud
-import com.ymest.rebost.sqlite.TaulaProductesALlistesCrud
-import com.ymest.rebost.sqlite.TaulaProductesCrud
+import com.ymest.rebost.sqlite.*
 import com.ymest.rebost.utils.Constants
 import com.ymest.rebost.utils.Funcions
 import com.ymest.rebost.utils.Network
@@ -68,6 +66,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
     var textABuscar: String = ""
     lateinit var vede:String
     lateinit var idLlista: String
+    lateinit var idUbic: String
     var idLlistaNum: Int = 0
     lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var viewAdapter: AdaptadorCustom
@@ -99,6 +98,13 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
                 viewAdapter.iniciarActionMode()
                 actionMode = mode
                 mode?.menuInflater?.inflate(R.menu.menu_contextual_lista_productos, menu)
+                if(vede == Constants.HISTORIAL
+                    || vede == Constants.MAINACT
+                    || vede == Constants.CATEGORIES
+                    || vede == Constants.MARQUES){
+                    var btnEliminar = menu?.findItem(R.id.imDeleteDeLista)
+                    btnEliminar?.isVisible = false
+                }
                 return true
             }
 
@@ -112,6 +118,9 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
                 when(item?.itemId){
                     R.id.im_addToList ->{
 
+                    }
+                    R.id.imDeleteDeLista->{
+                        mostraADEliminarArticulo()
                     }
                 }
                 return true
@@ -136,14 +145,22 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         when (vede){
             Constants.MISLISTAS -> {
                 idLlista = intent.getStringExtra("IDLLISTA").toString()
+                if (idLlista=="3") fabAddPorducte.visibility = View.GONE
                 nomCat = ""
                 idCat = ""
                 toolbarProductesDeCategoria.title =
                     TaulaLlistesCrud(this).getLlista(idLlista.toInt()).nomLlista
                 carregaProductesLlista(idLlista, orden, textABuscar)
             }
+            Constants.MISUBICACIONES->{
+                idUbic = intent.getStringExtra("IDLLISTA").toString()
+                nomCat = ""
+                idCat = ""
+                toolbarProductesDeCategoria.title =  TaulaUbicacionsCrud(this).getUbicacio(idUbic.toInt()).nomubicacio
+                carregaProductesLlista(idUbic, orden, textABuscar)
+            }
             Constants.CATEGORIES, Constants.MARQUES -> {
-                idLlista = ""
+                idLlista = "0"
                 nomCat = intent.getStringExtra("NOM").toString()
                 idCat = nomCat.replace(" ", "-").toLowerCase(Locale.ROOT)
                 toolbarProductesDeCategoria.title = nomCat
@@ -151,12 +168,18 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
             }
             Constants.MAINACT ->{
                 textABuscar = intent.getStringExtra("STRINGABUSCAR").toString()
+                if(intent.getStringExtra("IDLLISTA").toString().isNullOrEmpty()){
+                    idLlista = "0"
+                }else{
+                    idLlista = intent.getStringExtra("IDLLISTA").toString()
+                }
+                Log.d("IDLLISTA", "VEDE MAINACT: " + idLlista)
                 busca = true
                 idCat = ""
                 carregaProductesCategoria(pagina, 0, busca, textABuscar)
             }
             Constants.HISTORIAL ->{
-                idLlista = ""
+                idLlista = "0"
                 toolbarProductesDeCategoria.title = Constants.HISTORIAL
                 carregaProductesHistorial()
             }
@@ -177,17 +200,38 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
             intent = Intent(this, ProductesDeCategoriaActivity::class.java)
             intent.putExtra("VEDE", Constants.MAINACT)
             intent.putExtra("STRINGABUSCAR", "")
+            intent.putExtra("IDLLISTA", idLlista)
+            Log.d("IDLLISTA", " FABSUBMENUBUSCA: " + idLlista)
+
             startActivity(intent)
         }
 
         fabSubmenuScan.setOnClickListener {
             intent = Intent(this, ScanActivity::class.java)
+            intent.putExtra("IDLLISTA", idLlista)
             startActivity(intent)
         }
 
         tancarSubMenuFAB()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun mostraADEliminarArticulo() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.EliminardeLista))
+        builder.setMessage("Se van a eliminar todos los artículos seleccionados de la lista. Quieres continuar?")
+        builder.setPositiveButton("ACEPTAR"){ dialog, which ->
+            viewAdapter.deleteSelccionados()
+            carregaProductesLlista(idLlista, orden, textABuscar)
+
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("CERRAR"){dialog, which->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 
 
     fun tancarSubMenuFAB(){
@@ -206,11 +250,16 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onRestart() {
         when(vede){
             Constants.MISLISTAS ->{
                 carregaProductesLlista(idLlista, orden, textABuscar)
             }
+            Constants.MISUBICACIONES ->{
+                carregaProductesLlista(idUbic, orden, textABuscar)
+            }
+
             Constants.HISTORIAL ->{
                 carregaProductesHistorial()
             }
@@ -244,11 +293,18 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         listaProductos = arrayListOf()
         listaProductosPersonalizados = arrayListOf()
         var crudLlistaProductes = TaulaProductesALlistesCrud(this)
-        var productesdelaLlista: ArrayList<ProducteALlista>
-        if (idLlista.toInt() == 3){
-            productesdelaLlista = crudLlistaProductes.getCaducats(Funcions.obtenirDataActualMillis())
-        }else{
-            productesdelaLlista = crudLlistaProductes.getProductesLlista(idLlista.toInt())
+        var productesdelaLlista: ArrayList<ProducteALlista> = arrayListOf()
+        when (vede){
+            Constants.MISLISTAS->{
+                if (idLlista.toInt() == 3){
+                    productesdelaLlista = crudLlistaProductes.getCaducats(Funcions.obtenirDataActualMillis())
+                }else{
+                    productesdelaLlista = crudLlistaProductes.getProductesLlista(idLlista.toInt())
+                }
+            }
+            Constants.MISUBICACIONES->{
+                productesdelaLlista = crudLlistaProductes.getProductesdeUbicacio(idLlista.toInt())
+            }
         }
 
         for(i in productesdelaLlista){
@@ -282,7 +338,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
                                              !s.product?.code.isNullOrEmpty() && s.product?.code!!.contains(txtABuscar) ||
                                              !s.product?.stores.isNullOrEmpty() && s.product?.stores?.toLowerCase(Locale.ROOT)!!.contains(txtABuscar.toLowerCase(Locale.ROOT))
         } as ArrayList<ListaPersonalizadaProducto>
-        viewAdapter = AdaptadorCustom(this, null, filtrado, Constants.MISLISTAS, idLlista.toInt(), this, this)
+        viewAdapter = AdaptadorCustom(this, null, filtrado, vede, idLlista.toInt(), this, this)
         rvProducteDeCategoria.adapter = viewAdapter
     }
 
@@ -290,10 +346,12 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         menuInflater.inflate(R.menu.menu_contextual_prod_categories, menu)
         var btnbusca = menu?.findItem(R.id.imSearchProdCategories)
         var btnFiltro = menu?.findItem(R.id.imFiltro)
+        if(vede==Constants.MISUBICACIONES) idLlista = idUbic
         when (vede){
 
-            Constants.MISLISTAS -> {
+            Constants.MISLISTAS, Constants.MISUBICACIONES -> {
                 btnFiltro?.setOnMenuItemClickListener(object : MenuItem.OnMenuItemClickListener {
+                    @RequiresApi(Build.VERSION_CODES.O)
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
                         when (item?.itemId) {
                             R.id.imFiltro -> {
@@ -314,6 +372,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
                 buscaView.queryHint = "Producto, marca, código, ..."
 
                 buscaView.setOnCloseListener(object : SearchView.OnCloseListener {
+                    @RequiresApi(Build.VERSION_CODES.O)
                     override fun onClose(): Boolean {
                         Log.d("BuscaView", "Busqueda cerrada")
                         busca = false
@@ -327,6 +386,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return true
                     }
+                    @RequiresApi(Build.VERSION_CODES.O)
                     override fun onQueryTextChange(newText: String?): Boolean {
                         if (newText?.length!! > 2) {
                             textABuscar = newText
@@ -386,6 +446,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         return super.onCreateOptionsMenu(menu)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun muestraAlertDialogOrdenar() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.setTitle("Ordenar por:")
@@ -449,6 +510,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
     private fun initVars() {
         listaProdCat = ArrayList()
         convertidoAProducto = ArrayList()
+
     }
 
     private fun initViews() {
@@ -588,6 +650,12 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
             Toast.makeText(this, "Click en: " + id, Toast.LENGTH_SHORT).show()
             intent = Intent(this, DetallProdBuscatsActivity::class.java)
             intent.putExtra("ID", id)
+            intent.putExtra("VEDE", vede)
+            intent.putExtra("IDLL", idLlista)
+
+            Log.d("VARS", "ID: " + id)
+            Log.d("VARS", "VEDE: " + vede)
+            Log.d("IDLLISTA", " INTENT PUT EXTRA IDLLISTA: " + idLlista)
             startActivity(intent)
         }else{
             viewAdapter.seleccionarItem(id)
@@ -598,6 +666,8 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
 
     override fun onCellLongClickListener(id: String?): Boolean {
         Toast.makeText(this, "Click LLARG en: " + id, Toast.LENGTH_SHORT).show()
+        Log.d("VEDE", vede)
+
         if(!isActionMode){
             this.setSupportActionBar(toolbarProductesDeCategoria)
             this.startSupportActionMode(callback!!)
@@ -609,6 +679,7 @@ class ProductesDeCategoriaActivity : AppCompatActivity(), CellClickListener, Cel
         }
         //inidicamos en el titulo el número de elementos seleccionados
         actionMode?.title = viewAdapter.obtenerNumSeleccionados().toString() + " seleccionados"
+
         return true
     }
 

@@ -9,13 +9,21 @@ import com.ymest.rebost.R
 import com.ymest.rebost.detallproductesbuscats.ui.main.SectionsPagerAdapter
 
 class DetallProdBuscatsActivity : AppCompatActivity() {
-
+    var idLL:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detall_prod_buscats)
         val codi = intent.getStringExtra("ID")
+        val vede = intent.getStringExtra("VEDE").toString()
+        if(intent.getStringExtra("IDLL").toString().isNullOrEmpty() || intent.getStringExtra("IDLL").toString() == "null"){
+            idLL = 0
+        } else{
+            idLL= intent.getStringExtra("IDLL")!!.toInt()
+        }
+
+        Log.d("IDLLISTA", "DETALLPRODUCTESBUSCATS IDLLISTA: " + idLL)
         Log.d("CODI", codi.toString())
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, codi.toString())
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, codi.toString(), vede, idLL)
         val viewPager: ViewPager = findViewById(R.id.vpDetallProductes)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)

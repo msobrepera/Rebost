@@ -1,6 +1,5 @@
 package com.ymest.rebost.detallproductesbuscats.ui.main
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -39,12 +38,10 @@ import com.ymest.rebost.productesdecategoria.ProductesDeCategoriaActivity
 import com.ymest.rebost.sqlite.*
 import com.ymest.rebost.utils.Constants
 import com.ymest.rebost.utils.Funcions
-import kotlinx.android.synthetic.main.alert_dialog_calendar.view.*
-import kotlinx.android.synthetic.main.alert_dialog_cantidad.view.*
+import kotlinx.android.synthetic.main.alert_dialog_add_producte_llista.view.*
 import kotlinx.android.synthetic.main.alert_dialog_nova_llista.view.*
 import kotlinx.android.synthetic.main.alert_dialog_nova_ubicacio.view.*
 import kotlinx.android.synthetic.main.fragment_detall_prod_buscats.*
-
 
 
 /**
@@ -55,6 +52,7 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
     lateinit var nomProducte : TextView
     lateinit var marcaProducte : TextView
     lateinit var codiProducte : TextView
+    lateinit var nomLlista : TextView
     lateinit var imatgeProducte : ImageView
     lateinit var imatgeNova: ImageView
     lateinit var txtNova: TextView
@@ -88,6 +86,7 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
     lateinit var tvCategories: TextView
 
     var codi: String = ""
+    var idLlista:Int =0
 
     private lateinit var pageViewModel: PageViewModel
     private var pestanya: Int = 1
@@ -132,17 +131,18 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
     lateinit var rvDatesCaducitat: RecyclerView
     lateinit var adaptadorCad: AdaptadorCaducitat
 
+    lateinit var btnpositive: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             pestanya = arguments?.getInt(ARG_SECTION_NUMBER) ?: 1
             codi = arguments?.getString("CODIBARRES").toString()
+            idLlista = arguments?.getInt("IDLL", 0)!!.toInt()
+            Log.d("IDLLISTA", "ONCREATE IDLLISTA: " + idLlista)
             setIndex(pestanya)
         }
-
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
@@ -157,22 +157,11 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
             else -> root = inflater.inflate(R.layout.fragment_detall_prod_buscats, container, false)
         }
 
-       /* val textView: TextView = root.findViewById(R.id.section_label)
-        pageViewModel.text.observe(this, Observer<String> {
-            textView.text = it
-        })*/
-
-
         initViews(root)
         if(codi.isNotEmpty()){
             cargaInfoProducto(codi)
-
         }
-
-
-
         return root
-
     }
 
     private fun AfegirATaulaProductes() {
@@ -195,6 +184,7 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
                 imatgeProducte = v.findViewById(R.id.ivDetallBuscats)
                 marcaProducte = v.findViewById(R.id.tvMarcaDetallBuscats)
                 codiProducte = v.findViewById(R.id.tvCodiDetallBuscats)
+                nomLlista = v.findViewById(R.id.tvNomLlistaStock)
                 imatgeNova = v.findViewById(R.id.ivNovaDetallBuscats)
                 txtNova = v.findViewById(R.id.tvNovaDetallBuscats)
                 imatgeNutriScore = v.findViewById(R.id.ivNutriScore)
@@ -443,8 +433,20 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
         ivHelpNutriScore.setOnClickListener(this)
         ivFavorito.setOnClickListener(this)
         ivCompartirDetallBuscats.setOnClickListener(this)
+        if(idLlista != 0){
+            if(!TaulaLlistesCrud(ctx).gestionaCantidad(idLlista) &&
+                !TaulaLlistesCrud(ctx).gestionaFechas(idLlista) &&
+                !TaulaLlistesCrud(ctx).gestionaUbicaciones(idLlista)){
+                cvDatesCaducitat.visibility = View.GONE
+            }else{
+                nomLlista.text = TaulaLlistesCrud(ctx).getLlista(idLlista).nomLlista
+                CarregaRVDatesCaducitat()
+            }
+        }else{
+            cvDatesCaducitat.visibility = View.GONE
+        }
 
-        CarregaRVDatesCaducitat()
+
         btnAddFechaCad.setOnClickListener(this)
 
         Log.d("NOVA", producto.product?.novaGroup.toString())
@@ -507,7 +509,7 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
         var liniacad : ArrayList<ProducteALlista> = arrayListOf()
         var datesCadTrobades : ArrayList<ProducteALlista> = arrayListOf()
 
-        liniacad = TaulaProductesALlistesCrud(ctx).getLlistatDatesCaducitat(producto.code)
+        liniacad = TaulaProductesALlistesCrud(ctx).getLlistatDatesCaducitatXLlista(producto.code, idLlista)
         for (l in liniacad){
             datesCadTrobades.add(l)
         }
@@ -777,29 +779,9 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
        // return categoria
     }
 
-    companion object {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private const val ARG_SECTION_NUMBER = "section_number"
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        @JvmStatic
-        fun newInstance(sectionNumber: Int, context: Context, codibarres: String): PlaceholderFragment {
-            return PlaceholderFragment(context).apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_SECTION_NUMBER, sectionNumber)
-                    putString("CODIBARRES", codibarres)
 
-                }
-            }
-        }
-    }
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
         crudTProductoPersonalitzat = TaulaPersonalitzadaCrud(ctx)
         when(v?.id){
@@ -844,23 +826,284 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
             }
             R.id.ivAddaListaDetallBuscats ->{
                 //alertsDialog.muestraAlertDialogListas(ctx)
-                muestraAlertDialogListas()
+                //muestraAlertDialogListas()
+                muestraNewADAnadirALista(idLlista)
+                Log.d("IDLLISTA", "ONCLICKAÑADIR IDLISTA: " + idLlista)
             }
             R.id.btnAddFechaCad->{
-                muestraAlertDialogListas()
+                muestraNewADAnadirALista(idLlista)
+                //muestraAlertDialogListas()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun muestraNewADAnadirALista(idLlista: Int) {
+
+        val builder = AlertDialog.Builder(ctx)
+        val factory = LayoutInflater.from(ctx)
+        val view: View = factory.inflate(R.layout.alert_dialog_add_producte_llista, null)
+
+        rellenaCamposPorDefecto(idLlista, view)
+
+
+        ConfiguraVisiondeBotones(idLlista, view)
+
+        view.cvSeleccionaLista_ad_add_a_llista.setOnClickListener {
+            muestraAlertDialogListas(view)
+            //ConfiguraVisiondeBotones(idLlista, view)
+        }
+
+        view.cvSeleccionaUbicacion_ad_add_a_llista.setOnClickListener {
+            muestraAlertDialogUbicaciones(view)
+        }
+        view.cvFechaCad_ad_add_a_llista.setOnClickListener {
+            muestraAlertDialogFechaCad(view)
+        }
+        view.cvSeleccionaCantidad_ad_add_a_llista.setOnClickListener {
+            muestraAlertDialogCantidad(view)
+        }
+
+
+        builder.setView(view)
+        builder.setTitle("Añadir producto a Lista: ")
+        builder.setPositiveButton("AÑADIR"){ dialog, which ->
+            Toast.makeText(ctx, "Producto añadido", Toast.LENGTH_SHORT).show()
+            if(comprovaTotsElsCamps(view)){
+                NewafegirProducteALlista(view)
+            } else {
+                Toast.makeText(ctx, "Debes rellenar todos los campos", Toast.LENGTH_SHORT).show()
+            }
+
+            /*var idLlista:Int = TaulaLlistesCrud(ctx).getIdLlista(nomLlista)
+            if(TaulaLlistesCrud(ctx).gestionaFechas(idLlista)){
+                mostraAlertDialogCalendar(nomLlista, cantidadSeleccionada)
+            } else if(TaulaLlistesCrud(ctx).gestionaUbicaciones(idLlista)){
+                mostraAlertDialogUbicaciones(nomLlista, cantidadSeleccionada, 0)
+            } else{
+                afegirProducteALlista(nomLlista, cantidadSeleccionada, 0, 0)
+                Snackbar.make(ivAddaListaDetallBuscats,getString(R.string.SB_ProducteAfegitaLlista) + nomLlista, Snackbar.LENGTH_LONG).show()
+            }*/
+
+            /*if(view.etNomNovaLlista.text.isNotEmpty()){
+                addNovaLlista(view.etNomNovaLlista.text.toString())
+                afegirALlista(0, arrayOf(view.etNomNovaLlista.text.toString()))
+            }else{
+                Snackbar.make(ivAddaListaDetallBuscats ,getString(R.string.ERR_TEXTO_LISTA_VACIO),Snackbar.LENGTH_LONG).show()
+            }*/
+
+        }
+        builder.setNegativeButton("CANCELAR"){ dialog, which ->
+            dialog.dismiss()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.setOnShowListener {
+            ConfiguraVisiondeBotones(idLlista, view)
+            btnpositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            if(!comprovaTotsElsCamps(view)){
+                btnpositive.isEnabled = false
+            } else {
+                btnpositive.isEnabled = true
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun comprovaTotsElsCamps(v:View): Boolean {
+        var campsok: Boolean = true
+        if(v.tvNomLista_ad_add_a_llista.tag.toString() == "0"){
+            campsok = false
+            return campsok
+        }
+        if(TaulaLlistesCrud(ctx).gestionaUbicaciones(v.tvNomLista_ad_add_a_llista.tag.toString().toInt())){
+            if(v.tvNomUbicacio_ad_add_a_llista.tag == 0 && v.tvNomUbicacio_ad_add_a_llista.tag.toString().isNullOrEmpty()){
+                campsok = false
+                return campsok
+            }
+        }else {
+            v.tvNomUbicacio_ad_add_a_llista.tag = 0
+        }
+        if(TaulaLlistesCrud(ctx).gestionaFechas(v.tvNomLista_ad_add_a_llista.tag.toString().toInt())){
+            if(v.tvFechaCad_ad_add_a_llista.tag == 0 && v.tvFechaCad_ad_add_a_llista.tag.toString().isNullOrEmpty()){
+                campsok = false
+                return campsok
+            }
+        }else {
+            v.tvFechaCad_ad_add_a_llista.tag = 0
+        }
+        if(TaulaLlistesCrud(ctx).gestionaCantidad(v.tvNomLista_ad_add_a_llista.tag.toString().toInt())){
+            if(v.tvCantidad_ad_add_a_llista.text == "0" && v.tvCantidad_ad_add_a_llista.text.toString().isNullOrEmpty()){
+                campsok = false
+                return campsok
+            }
+        }else {
+            v.tvCantidad_ad_add_a_llista.text = "0"
+        }
+        if(campsok) btnpositive.isEnabled = true
+        Log.d("CAMPSOK", campsok.toString())
+        return campsok
+    }
+
+    private fun NewafegirProducteALlista(v:View) {
+        var item: ProducteALlista
+        item = ProducteALlista(0,
+            producto.code,
+            v.tvNomLista_ad_add_a_llista.tag.toString().toInt(),
+            v.tvCantidad_ad_add_a_llista.text.toString().toInt(),
+            v.tvFechaCad_ad_add_a_llista.tag.toString().toLong(),
+            v.tvNomUbicacio_ad_add_a_llista.tag.toString().toInt(),
+            0)
+        TaulaProductesALlistesCrud(ctx).addProducteALlista(item)
+        CarregaRVDatesCaducitat()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun rellenaCamposPorDefecto(idLlista: Int, v: View) {
+        if(idLlista!=0) {
+            v.tvNomLista_ad_add_a_llista.text = TaulaLlistesCrud(ctx).getLlista(idLlista).nomLlista
+            v.tvNomLista_ad_add_a_llista.tag = idLlista.toString()
+            v.tvNomUbicacio_ad_add_a_llista.tag = 1
+            v.tvNomUbicacio_ad_add_a_llista.text =
+                TaulaUbicacionsCrud(ctx).getUbicacio(1).nomubicacio
+            v.tvFechaCad_ad_add_a_llista.tag =
+                Funcions.obtenirDataActualMillis() + (7 * 24 * 3600000)
+            v.tvFechaCad_ad_add_a_llista.text =
+                Funcions.MillisToDate(v.tvFechaCad_ad_add_a_llista.tag.toString().toLong())
+            v.tvCantidad_ad_add_a_llista.text = "1"
+        } else {
+            v.tvNomLista_ad_add_a_llista.tag = idLlista.toString()
+            v.cvSeleccionaUbicacion_ad_add_a_llista.visibility = View.GONE
+            v.cvFechaCad_ad_add_a_llista.visibility = View.GONE
+            v.cvSeleccionaCantidad_ad_add_a_llista.visibility = View.GONE
+        }
+
+    }
+
+    private fun muestraAlertDialogCantidad(v: View) {
+        val numberPicker = NumberPicker(ctx)
+        var cantidadSeleccionada: Int = 0
+        numberPicker.maxValue = 30
+        numberPicker.minValue = 1
+        numberPicker.value = 1
+
+        val builder = AlertDialog.Builder(ctx)
+        builder.setView(numberPicker)
+        builder.setTitle("Selecciona cantidad")
+        builder.setMessage("")
+        builder.setPositiveButton("ACEPTAR") { dialog, which ->
+            cantidadSeleccionada = numberPicker.value
+            v.tvCantidad_ad_add_a_llista.text = cantidadSeleccionada.toString()
+        }
+        builder.setNegativeButton(
+            "CANCELAR"
+        ) { dialog, which -> dialog.dismiss() }
+        builder.create()
+        builder.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun muestraAlertDialogFechaCad(v: View) {
+        var fechaSeleccionada : Long = Funcions.obtenirDataActualMillis() + (7*24*3600000)
+        val calendar = CalendarView(ctx)
+        calendar.firstDayOfWeek = 2
+        calendar.setDate(Funcions.obtenirDataActualMillis() + (7*24*3600000))
+
+        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            fechaSeleccionada = Funcions.DataToMillis( dayOfMonth.toString() + "/" + (month+1).toString() + "/" + year.toString())
+        }
+
+        val builder = AlertDialog.Builder(ctx)
+        builder.setView(calendar)
+        builder.setTitle("Selecciona Fecha Caducidad")
+        builder.setMessage("")
+        builder.setPositiveButton("OK") { dialog, which ->
+            v.tvFechaCad_ad_add_a_llista.text = Funcions.MillisToDate(fechaSeleccionada)
+            v.tvFechaCad_ad_add_a_llista.tag = fechaSeleccionada
+        }
+        builder.setNegativeButton(
+            "CANCEL"
+        ) { dialog, which -> dialog.dismiss() }
+        builder.create()
+        builder.show()
+    }
+
+    private fun muestraAlertDialogUbicaciones(v:View) {
+        var ubicacionsNom: Array<String>
+        ubicacionsNom = arrayOf()
+        var crudUbicacions = TaulaUbicacionsCrud(ctx)
+
+        for(ubicacio in crudUbicacions.getAllUbicacions()){
+            ubicacionsNom += ubicacio.nomubicacio
+        }
+        ubicacionsNom += getString(R.string.titulo_AfegirUbicacio)
+
+        val builder = AlertDialog.Builder(ctx)
+        builder.setTitle(getString(R.string.titulo_ubicacion))
+
+        builder.setItems(ubicacionsNom, DialogInterface.OnClickListener { dialog, which ->
+            if (which == ubicacionsNom.size - 1) {
+                /*Toast.makeText(ctx, "Click a Afegir: " + which, Toast.LENGTH_SHORT).show()*/
+                mostraAlertDialogNovaUbicacio(v)
+            } else {
+                var idUbicacio = TaulaUbicacionsCrud(ctx).getIdUbicacio(ubicacionsNom[which])
+                v.tvNomUbicacio_ad_add_a_llista.text = ubicacionsNom[which]
+                v.tvNomUbicacio_ad_add_a_llista.tag = idUbicacio
+                //afegirProducteALlista(nomLlista, i, millis, idUbicacio)
+
+
+            }
+        })
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun ConfiguraVisiondeBotones(idLlista: Int, view: View) {
+        if(idLlista != 0) {
+            if (TaulaLlistesCrud(ctx).gestionaUbicaciones(idLlista)) {
+                Log.d("VISION", "UBICACIONES: TRUE")
+                view?.cvSeleccionaUbicacion_ad_add_a_llista?.visibility = View.VISIBLE
+                view.tvNomUbicacio_ad_add_a_llista.tag = "1"
+                view.tvNomUbicacio_ad_add_a_llista.text = TaulaUbicacionsCrud(ctx).getUbicacio(1).nomubicacio
+            } else {
+                Log.d("VISION", "UBICACIONES: FALSE")
+                view?.cvSeleccionaUbicacion_ad_add_a_llista?.visibility = View.GONE
+                view.tvNomUbicacio_ad_add_a_llista.tag = "0"
+            }
+            if (TaulaLlistesCrud(ctx).gestionaFechas(idLlista)) {
+                Log.d("VISION", "FECHAS: TRUE")
+                view?.cvFechaCad_ad_add_a_llista?.visibility = View.VISIBLE
+                view.tvFechaCad_ad_add_a_llista.tag = Funcions.obtenirDataActualMillis() + (7*24*3600000)
+                view.tvFechaCad_ad_add_a_llista.text = Funcions.MillisToDate(view.tvFechaCad_ad_add_a_llista.tag.toString().toLong())
+            } else {
+                Log.d("VISION", "FECHAS: FALSE")
+                view?.cvFechaCad_ad_add_a_llista?.visibility = View.GONE
+                view.tvFechaCad_ad_add_a_llista.tag = 0
+            }
+            if (TaulaLlistesCrud(ctx).gestionaCantidad(idLlista)) {
+                Log.d("VISION", "CANTIDAD: TRUE")
+                view?.cvSeleccionaCantidad_ad_add_a_llista?.visibility = View.VISIBLE
+                view.tvCantidad_ad_add_a_llista.text = "1"
+            } else {
+                Log.d("VISION", "CANTIDAD: FALSE")
+                view?.cvSeleccionaCantidad_ad_add_a_llista?.visibility = View.GONE
+                view.tvCantidad_ad_add_a_llista.text = "0"
             }
         }
     }
 
 
-    private fun muestraAlertDialogListas() {
+    private fun muestraAlertDialogListas(v:View) {
 
         var llistesNom: Array<String>
         llistesNom = arrayOf()
         crudLlistes = TaulaLlistesCrud(ctx)
 
         for(llista in crudLlistes.getAllLlista()){
-            llistesNom += llista.nomLlista!!
+            if(llista.id!=3) llistesNom += llista.nomLlista!!
         }
         llistesNom += getString(R.string.titulo_AfegirLlista)
 
@@ -870,25 +1113,21 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
         builder.setItems(llistesNom, DialogInterface.OnClickListener { dialog, which ->
             if (which == llistesNom.size - 1) {
                 Toast.makeText(ctx, "Click a Afegir: " + which, Toast.LENGTH_SHORT).show()
-                mostraAlertDialogNovaLlista()
+               mostraAlertDialogNovaLlista(v)
             } else {
-
-                var idLlista = TaulaLlistesCrud(ctx).getIdLlista(llistesNom[which])
-                if (TaulaLlistesCrud(ctx).gestionaCantidad(idLlista)) {
-                    mostraAlertDialogQuantitat(llistesNom[which])
-                } else if (TaulaLlistesCrud(ctx).gestionaFechas(idLlista)) {
-                    mostraAlertDialogCalendar(llistesNom[which], 0)
-                } else {
-                    afegirProducteALlista(llistesNom[which], 0, 0, 0)
-                }
-
+                var idL = TaulaLlistesCrud(ctx).getIdLlista(llistesNom[which])
+                v.tvNomLista_ad_add_a_llista.text = llistesNom[which]
+                v.tvNomLista_ad_add_a_llista.tag = idL
+               ConfiguraVisiondeBotones(TaulaLlistesCrud(ctx).getIdLlista(llistesNom[which]), v)
+                comprovaTotsElsCamps(v)
             }
         })
+
         val dialog: AlertDialog = builder.create()
         dialog.show()
     }
 
-    private fun mostraAlertDialogQuantitat(nomLlista:String) {
+   /* private fun mostraAlertDialogQuantitat(nomLlista:String) {
         var cantidadSeleccionada: Int = 0
         val builder = AlertDialog.Builder(ctx)
         val factory = LayoutInflater.from(ctx)
@@ -914,12 +1153,12 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
                 Snackbar.make(ivAddaListaDetallBuscats,getString(R.string.SB_ProducteAfegitaLlista) + nomLlista, Snackbar.LENGTH_LONG).show()
             }
 
-            /*if(view.etNomNovaLlista.text.isNotEmpty()){
+            *//*if(view.etNomNovaLlista.text.isNotEmpty()){
                 addNovaLlista(view.etNomNovaLlista.text.toString())
                 afegirALlista(0, arrayOf(view.etNomNovaLlista.text.toString()))
             }else{
                 Snackbar.make(ivAddaListaDetallBuscats ,getString(R.string.ERR_TEXTO_LISTA_VACIO),Snackbar.LENGTH_LONG).show()
-            }*/
+            }*//*
 
         }
         builder.setNegativeButton("CANCELAR"){ dialog, which ->
@@ -927,9 +1166,9 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
-    }
+    }*/
 
-    private fun mostraAlertDialogCalendar(nomLlista:String, q: Int) {
+    /*private fun mostraAlertDialogCalendar(nomLlista:String, q: Int) {
         var fecha:String = ""
         var millis: Long = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             Funcions.obtenirDataActualMillis()
@@ -956,12 +1195,12 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
                 afegirProducteALlista(nomLlista, q, millis, 0)
             }
             //Snackbar.make(ivAddaListaDetallBuscats,getString(R.string.SB_ProducteAfegitaLlista) + nomLlista, Snackbar.LENGTH_LONG).show()
-            /*if(view.etNomNovaLlista.text.isNotEmpty()){
+            *//*if(view.etNomNovaLlista.text.isNotEmpty()){
                 addNovaLlista(view.etNomNovaLlista.text.toString())
                 afegirALlista(0, arrayOf(view.etNomNovaLlista.text.toString()))
             }else{
                 Snackbar.make(ivAddaListaDetallBuscats ,getString(R.string.ERR_TEXTO_LISTA_VACIO),Snackbar.LENGTH_LONG).show()
-            }*/
+            }*//*
 
         }
         builder.setNegativeButton("CANCELAR"){ dialog, which ->
@@ -969,9 +1208,9 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
-    }
+    }*/
 
-    private fun mostraAlertDialogNovaLlista() {
+    private fun mostraAlertDialogNovaLlista(v:View) {
         var gestionadates:Int = 0
         var gestionaCantidad:Int = 0
         var gestionaUbicacion:Int = 0
@@ -987,20 +1226,9 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
                 if (view.cbGestionaCantidad.isChecked) gestionaCantidad = 1 else gestionaCantidad = 0
                 if (view.cbGestionaUbicacion.isChecked) gestionaUbicacion = 1 else gestionaUbicacion = 0
                 addNovaLlista(view.etNomNovaLlista.text.toString(), gestionadates, gestionaCantidad, gestionaUbicacion)
-
-                var idNovaLlista = TaulaLlistesCrud(ctx).getIdLlista(view.etNomNovaLlista.text.toString())
-                if(TaulaLlistesCrud(ctx).gestionaCantidad(idNovaLlista)){
-                    mostraAlertDialogQuantitat(view.etNomNovaLlista.text.toString())
-                } else if(TaulaLlistesCrud(ctx).gestionaFechas(idNovaLlista)){
-                    mostraAlertDialogCalendar(view.etNomNovaLlista.text.toString(), 0)
-                } else if(TaulaLlistesCrud(ctx).gestionaUbicaciones(idNovaLlista)){
-                    mostraAlertDialogUbicaciones(view.etNomNovaLlista.text.toString(), 0, 0)
-                }else{
-                    afegirProducteALlista(view.etNomNovaLlista.text.toString(),0,0, 0)
-                    Snackbar.make(ivAddaListaDetallBuscats ,getString(R.string.SB_LlistaAfegida),Snackbar.LENGTH_LONG).show()
-                }
-
-
+                v.tvNomLista_ad_add_a_llista.text = view.etNomNovaLlista.text.toString()
+                v.tvNomLista_ad_add_a_llista.tag = TaulaLlistesCrud(ctx).getIdLlista(view.etNomNovaLlista.text.toString())
+                ConfiguraVisiondeBotones(TaulaLlistesCrud(ctx).getIdLlista(view.etNomNovaLlista.text.toString()), v)
             }else{
                 Snackbar.make(ivAddaListaDetallBuscats ,getString(R.string.ERR_TEXTO_LISTA_VACIO),Snackbar.LENGTH_LONG).show()
             }
@@ -1014,7 +1242,7 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
     }
 
     private fun mostraAlertDialogUbicaciones(nomLlista: String, i: Int, millis:Long) {
-        var ubicacionsNom: Array<String>
+       /* var ubicacionsNom: Array<String>
         ubicacionsNom = arrayOf()
         var crudUbicacions = TaulaUbicacionsCrud(ctx)
 
@@ -1038,18 +1266,14 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
             }
         })
         val dialog: AlertDialog = builder.create()
-        dialog.show()
+        dialog.show()*/
 
     }
 
-    private fun mostraAlertDialogNovaUbicacio(nomLlista: String, i: Int, millis:Long, error:String?) {
+    private fun mostraAlertDialogNovaUbicacio(v:View) {
         val builder = AlertDialog.Builder(ctx)
         val factory = LayoutInflater.from(ctx)
         val view: View = factory.inflate(R.layout.alert_dialog_nova_ubicacio, null)
-
-        if(!error.isNullOrEmpty()){
-            view.etNomUbicacioAlert.setError(error)
-        }
 
         builder.setView(view)
         builder.setTitle("Añadir Ubicación: ")
@@ -1058,23 +1282,26 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
                 if(!TaulaUbicacionsCrud(ctx).existeUbicacion(view.etNomUbicacioAlert.text.toString())){
                     addNovaUbicacio(view.etNomUbicacioAlert.text.toString(), view.etDescripcionUbicacionAlert.text.toString())
                     var idUbicacio = TaulaUbicacionsCrud(ctx).getIdUbicacio(view.etNomUbicacioAlert.text.toString())
-                    afegirProducteALlista(nomLlista, i, millis, idUbicacio)
+                    v.tvNomUbicacio_ad_add_a_llista.text = view.etNomUbicacioAlert.text.toString()
+                    v.tvNomUbicacio_ad_add_a_llista.tag = idUbicacio
+                    //afegirProducteALlista(nomLlista, i, millis, idUbicacio)
 
                 } else {
                     view.etNomUbicacioAlert.setError(getString(R.string.ERR_UBICACION_EXISTE))
                     Snackbar.make(view.etNomUbicacioAlert ,getString(R.string.ERR_UBICACION_EXISTE), Snackbar.LENGTH_LONG).show()
-                    mostraAlertDialogNovaUbicacio(nomLlista, i, millis, getString(R.string.ERR_UBICACION_EXISTE))
+                    //mostraAlertDialogNovaUbicacio(v)
                 }
 
             }else{
                 view.etNomUbicacioAlert.setError(getString(R.string.ERR_TEXTO_UBIC_VACIO))
                 Snackbar.make(view.etNomUbicacioAlert ,getString(R.string.ERR_TEXTO_UBIC_VACIO),Snackbar.LENGTH_LONG).show()
-                mostraAlertDialogNovaUbicacio(nomLlista, i, millis, getString(R.string.ERR_TEXTO_UBIC_VACIO))
+                //mostraAlertDialogNovaUbicacio(nomLlista, i, millis, getString(R.string.ERR_TEXTO_UBIC_VACIO))
             }
 
         }
         builder.setNegativeButton("CANCELAR"){ dialog, which ->
-            mostraAlertDialogUbicaciones(nomLlista, i, millis)
+            //mostraAlertDialogUbicaciones(nomLlista, i, millis)
+            dialog.dismiss()
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -1082,13 +1309,14 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
 
     private fun addNovaUbicacio(nomUbicacio: String, descUbic:String) {
         var crudUbic = TaulaUbicacionsCrud(ctx)
-        crudUbic.addUbicacio(Ubicacio(0, nomUbicacio, descUbic))
+        var newId = crudUbic.getNextIDUbicacions()
+        crudUbic.addUbicacio(Ubicacio(newId, nomUbicacio, descUbic))
     }
 
 
     public fun addNovaLlista(titulo:String, gestionaDates:Int, gestionaCantidad:Int, gestionaUbicacion: Int) {
         var crudLlista: TaulaLlistesCrud = TaulaLlistesCrud(ctx)
-        var nextID = crudLlista.getNextID()
+        var nextID = crudLlista.getNextIDLlista()
         crudLlista.addLlista(nextID, titulo, gestionaDates, gestionaCantidad, gestionaUbicacion)
     }
 
@@ -1283,6 +1511,30 @@ class PlaceholderFragment(var ctx: Context) : Fragment(), View.OnClickListener, 
 
         adaptadorCad.notifyDataSetChanged()
         CarregaRVDatesCaducitat()
+    }
+
+    companion object {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private const val ARG_SECTION_NUMBER = "section_number"
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        @JvmStatic
+        fun newInstance(sectionNumber: Int, context: Context, codibarres: String, vede: String, idLl: Int): PlaceholderFragment {
+            return PlaceholderFragment(context).apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                    putString("CODIBARRES", codibarres)
+                    putString("VEDE", vede)
+                    putInt("IDLL", idLl)
+                }
+            }
+        }
     }
 
 }

@@ -43,12 +43,15 @@ class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var it
         val itemU = itemsU?.get(position)
         val itemL = itemsL?.get(position)
         when(vede){
-            Constants.UBICACIONS ->{
+            Constants.UBICACIONS, Constants.MISUBICACIONES ->{
                 holder.nomUbicacio.text = itemU?.nomubicacio
                 holder.nomUbicacio.tag = itemU?.id.toString()
+                Log.d("IDUBIC", itemU?.id.toString())
                 holder.tag.visibility = View.GONE
                 //holder.tag.text = item.id.toString()
-                holder.descUbicacio.text = itemU?.descubicacio
+                if(vede==Constants.UBICACIONS) holder.descUbicacio.text = itemU?.descubicacio
+                else holder.descUbicacio.text = TaulaProductesALlistesCrud(ctx).getNumProductosUnicosXUbicacion(itemU?.id!!).toString() + " productos"
+                //holder.descUbicacio.text = itemU?.descubicacio
                 holder.ivCalendar.visibility = View.GONE
                 holder.ivHastag.visibility = View.GONE
                 holder.ivUbicacio.visibility = View.GONE
@@ -94,6 +97,7 @@ class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var it
 
                 if(itemL?.gestion_dataCad == 0) holder.ivCalendar.visibility = View.GONE else holder.ivCalendar.visibility = View.VISIBLE
                 if(itemL?.gestiona_cantidad == 0) holder.ivHastag.visibility = View.GONE else holder.ivHastag.visibility = View.VISIBLE
+                if(itemL?.gestiona_ubicaciones == 0) holder.ivUbicacio.visibility = View.GONE else holder.ivUbicacio.visibility = View.VISIBLE
 
                 if(itemSeleccionados?.contains(itemL?.id)!!){
                     holder.itemView.setBackgroundColor(Color.LTGRAY)
@@ -120,6 +124,7 @@ class Adaptador2linies(var ctx: Context, var itemsU:ArrayList<Ubicacio>?, var it
         var itemCount: Int = 0
         when(vede){
             Constants.UBICACIONS -> itemCount = itemsU?.count()!!
+            Constants.MISUBICACIONES -> itemCount = itemsU?.count()!!
             Constants.LLISTES -> itemCount = itemsL?.count()!!
             Constants.MISLISTAS -> itemCount = itemsL?.count()!!
         }
